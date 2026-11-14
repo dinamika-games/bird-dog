@@ -292,13 +292,12 @@ func _build_shared() -> void:
     for i in range(mini(players, _crew.captains.size())):
         looks.append(_crew.captains[i])
     _wheel.looks = looks
-    if players > 1:
-        _wheel.position = Vector2(760, 780)
-        _wheel.size = Vector2(400, 284)
-    else:
-        _wheel.position = Vector2(24, 690)
-        _wheel.size = Vector2(480, 340)
+    var wheel_rect := Rect2(760, 780, 400, 284) if players > 1 else Rect2(24, 690, 480, 340)
+    _wheel.position = wheel_rect.position
+    _wheel.size = wheel_rect.size
     hud.add_child(_wheel)
+    for view in _views:
+        view.reserve(Rect2(_wheel.position - view.position, _wheel.size))
 
     _overlay = CanvasLayer.new()
     _overlay.layer = 3

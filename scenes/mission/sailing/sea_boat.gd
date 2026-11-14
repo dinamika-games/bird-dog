@@ -133,6 +133,27 @@ func _process(delta: float) -> void:
     queue_redraw()
 
 
+## The rectangle on the screen which a boat of the length [param length] (see
+## Ship), heading [param heading], covers around its middle: the hull with the
+## figurehead, the sails swung out, the oars and the shadow, for a boat drawn at
+## the scale of 1 (as the camera keeps the boats; see SeaView.follow).
+static func footprint(heading: float, length := 1.0) -> Rect2:
+    # NOTE (mristin):
+    # The figurehead reaches FIGUREHEAD_BASE_Y - FIGUREHEAD_LENGTH ahead; the
+    # sails, swung along the hull, reach about as far behind the stern; the oars
+    # reach out about 60 on each side.
+    var bow := -FIGUREHEAD_BASE_Y + FIGUREHEAD_LENGTH
+    var corners: Array[Vector2] = [
+        Vector2(-60, -bow), Vector2(60, -bow), Vector2(60, 70), Vector2(-60, 70)
+    ]
+    var rect := Rect2((corners[0] * length).rotated(heading), Vector2.ZERO)
+    for corner in corners:
+        rect = rect.expand((corner * length).rotated(heading))
+    # NOTE (mristin):
+    # The shadow falls a little to the bottom right.
+    return rect.merge(Rect2(rect.position + Vector2(7, 9), rect.size))
+
+
 ## The masts of the ship from the bow to the stern: where they stand, how
 ## wide their sails are, and which one is the main mast (with the pennant).
 func masts() -> Array[Dictionary]:

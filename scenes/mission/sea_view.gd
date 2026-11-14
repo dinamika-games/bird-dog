@@ -11,6 +11,10 @@ extends SubViewportContainer
 ## With one player, the view fills the screen; with two, every player has a
 ## half of it (960 x 1080), as in ergo-chaos, and the panels stand mirrored so
 ## that the webcam fits between the two halves at the bottom.
+##
+## The HUD never covers the player's boat: the middle of the view, where the
+## camera keeps it, stays clear of the panels, and when the camera looks ahead
+## and the boat comes under a panel, the panel moves away (see HudDodge).
 
 ## The boats are this large on the chart at the zoom of 1; they keep this
 ## (small) size on the screen whatever the zoom of the camera (see ChartZoom),
@@ -29,6 +33,37 @@ const ZOOM_OUT_SECONDS := 2.0
 ## When zoomed in fully, the camera looks ahead of the boat by this share of
 ## the half of the view, so that the crew sees the channel ahead.
 const LOOK_AHEAD := 0.35
+
+## The places of the panels of the HUD (see [method layout]) for the left half
+## (two players) and for the whole screen (one player): their positions and
+## their sizes before [constant HALF_SCALE]. The middle of the view, where the
+## camera keeps the boat, stays clear of them (see [method rest_zone]).
+const HALF_LAYOUT := {
+    "banner": Rect2(12, 8, 920, 130),
+    "days": Rect2(12, 116, 332, 110),
+    "hull": Rect2(12, 207, 332, 90),
+    "bar": Rect2(12, 283, 300, 80),
+    "provisions": Rect2(12, 351, 96, 276),
+    "rose": Rect2(711, 116, 316, 360),
+    "cargo": Rect2(711, 394, 316, 144),
+    "minimap": Rect2(12, 840, 290, 296),
+    "hint": Rect2(240, 870, 410, 260),
+}
+const FULL_LAYOUT := {
+    "days": Rect2(30, 24, 420, 120),
+    "hull": Rect2(30, 160, 420, 90),
+    "bar": Rect2(30, 264, 420, 90),
+    "cargo": Rect2(30, 364, 420, 144),
+    "provisions": Rect2(464, 190, 104, 318),
+    "banner": Rect2(490, 24, 1000, 150),
+    "rose": Rect2(1560, 0, 340, 360),
+    "minimap": Rect2(1500, 640, 390, 410),
+    "hint": Rect2(560, 860, 800, 190),
+}
+
+## In a half of the screen, the panels draw this much smaller, so that a panel
+## which the boat comes under finds a free place elsewhere (see HudDodge).
+const HALF_SCALE := 0.75
 
 ## The player (0 or 1) whose boat the view follows.
 var player := 0
@@ -49,7 +84,15 @@ var shade: CloudShade
 var hint: HintPanel
 var rose: WindRose
 
+## The places of the panels which keep clear of the boat (see HudDodge): their
+## homes in the layout, the slots they move to, and the places of the view no
+## panel goes to (the webcam).
+var homes: Array[Rect2] = []
+var slots: Array[Rect2] = []
+var reserved: Array[Rect2] = []
+
 var _hud: CanvasLayer
+var _dodgers: Array[Control] = []
 var _zoom_timer := 0.0
 
 
@@ -90,21 +133,68 @@ func setup(
     _build_hud(run, wind, width)
 
 
-## Place a panel: the positions are for the left half (or the whole screen);
-## in the right half, they are mirrored.
-func _place(control: Control, at: Vector2, extent: Vector2) -> void:
-    var x := at.x
-    if half and player == 1:
-        x = 960 - at.x - extent.x
-    control.position = Vector2(x, at.y)
-    control.size = extent
+## The places of the panels of the HUD in the view of [param the_player], as
+## large as they draw: the positions of the right half are mirrored, so that the
+## webcam fits between the two halves at the bottom.
+static func layout(is_half: bool, the_player: int) -> Dictionary:
+    var result := {}
+    var source: Dictionary = HALF_LAYOUT if is_half else FULL_LAYOUT
+    for name: String in source:
+        var rect: Rect2 = source[name]
+        rect.size *= scale_of(is_half)
+        if is_half and the_player == 1:
+            rect.position.x = 960 - rect.position.x - rect.size.x
+        result[name] = rect
+    return result
+
+
+## How large the panels of the HUD draw (see [constant HALF_SCALE]).
+static func scale_of(is_half: bool) -> float:
+    return HALF_SCALE if is_half else 1.0
+
+
+## Where the boat of the standard length (see Ship) stands in a view of
+## [param view_size] when the camera does not look ahead, whichever way it
+## heads, with the margin at which the panels leave (see HudDodge). The panels
+## stand clear of it at home, so that they move only when the boat sails off
+## the middle.
+static func rest_zone(view_size: Vector2) -> Rect2:
+    var rect := Rect2(view_size * 0.5, Vector2.ZERO)
+    for i in range(36):
+        var footprint := SeaBoat.footprint(TAU * i / 36.0)
+        rect = rect.merge(Rect2(footprint.position + view_size * 0.5, footprint.size))
+    return rect.grow(HudDodge.LEAVE_MARGIN)
+
+
+## Place a panel at [param rect] (see [method layout]), drawn at the scale of
+## the view; a panel which [param dodges] keeps clear of the boat (see
+## HudDodge).
+func _place(control: Control, rect: Rect2, dodges := true) -> void:
+    var scale_factor := scale_of(half) if dodges else 1.0
+    control.position = rect.position
+    control.scale = Vector2.ONE * scale_factor
+    control.size = rect.size / scale_factor
     _hud.add_child(control)
+    if dodges:
+        _dodgers.append(control)
+        homes.append(rect)
+        slots.append(rect)
+
+
+## Keep the panels of the HUD off the place [param reserved] of the view (in
+## its coordinates), e.g., the webcam which stands over the views.
+func reserve(reserved_rect: Rect2) -> void:
+    var clipped := reserved_rect.intersection(Rect2(Vector2.ZERO, size))
+    if clipped.has_area():
+        reserved.append(clipped)
+        for home in homes:
+            assert(not home.intersects(clipped), "A panel of the HUD stands under %s" % clipped)
 
 
 func _build_hud(run: MissionRun, wind: SeaWind, width: int) -> void:
     shade = CloudShade.new()
     shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    _place(shade, Vector2.ZERO, Vector2(width, 1080))
+    _place(shade, Rect2(0, 0, width, 1080), false)
 
     var banner := ClueBanner.new()
     banner.run = run
@@ -124,43 +214,39 @@ func _build_hud(run: MissionRun, wind: SeaWind, width: int) -> void:
     cargo.run = run
     cargo.player = player
     minimap = Minimap.new()
-
-    if half:
-        _place(banner, Vector2(20, 16), Vector2(920, 130))
-        _place(days, Vector2(20, 160), Vector2(380, 110))
-        _place(hull, Vector2(20, 282), Vector2(380, 90))
-        _place(bar, Vector2(20, 384), Vector2(380, 80))
-        _place(cargo, Vector2(20, 476), Vector2(380, 144))
-        _place(provisions, Vector2(412, 282), Vector2(96, 338))
-        _place(rose, Vector2(600, 150), Vector2(340, 360))
-        _place(minimap, Vector2(20, 764), Vector2(290, 296))
-    else:
-        _place(days, Vector2(30, 24), Vector2(420, 120))
-        _place(hull, Vector2(30, 160), Vector2(420, 90))
-        _place(bar, Vector2(30, 264), Vector2(420, 90))
-        _place(cargo, Vector2(30, 364), Vector2(420, 144))
-        _place(provisions, Vector2(464, 190), Vector2(104, 318))
-        _place(banner, Vector2(490, 24), Vector2(1000, 150))
-        _place(rose, Vector2(1560, 0), Vector2(340, 360))
-        _place(minimap, Vector2(1500, 640), Vector2(390, 410))
-
-    # NOTE (mristin):
-    # The arrow and the toasts draw over the panels.
-    arrow = TargetArrow.new()
-    arrow.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    _place(arrow, Vector2.ZERO, Vector2(width, 1080))
-    toast = Toast.new()
-    toast.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    _place(toast, Vector2.ZERO, Vector2(width, 1080))
-
-    # NOTE (mristin):
-    # The tips stand at the bottom, clear of the panels and the webcam.
     hint = HintPanel.new()
     hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    if half:
-        _place(hint, Vector2(330, 790), Vector2(410, 260))
-    else:
-        _place(hint, Vector2(560, 860), Vector2(800, 190))
+
+    var places := layout(half, player)
+    var zone := rest_zone(Vector2(width, 1080))
+    var panels := {
+        "banner": banner,
+        "days": days,
+        "hull": hull,
+        "bar": bar,
+        "provisions": provisions,
+        "rose": rose,
+        "cargo": cargo,
+        "minimap": minimap,
+        "hint": hint,
+    }
+    for name: String in panels:
+        assert(
+            not places[name].intersects(zone),
+            "The panel %s of the HUD stands where the boat rests" % name
+        )
+        _place(panels[name], places[name])
+
+    # NOTE (mristin):
+    # The arrow and the toasts draw over the panels; they point at the sea and
+    # stay clear of the middle, so they do not dodge. The tips draw over all.
+    arrow = TargetArrow.new()
+    arrow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    _place(arrow, Rect2(0, 0, width, 1080), false)
+    toast = Toast.new()
+    toast.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    _place(toast, Rect2(0, 0, width, 1080), false)
+    _hud.move_child(hint, -1)
 
 
 ## Show or hide the HUD (it hides while a scene of a port is open).
@@ -191,3 +277,27 @@ func follow(helm: Helm, chart: ChartView, snap := false, delta := 0.0) -> void:
     camera.position = boat.position + ahead
     if snap:
         camera.reset_smoothing()
+    _keep_clear(boat)
+
+
+## Where the boat stands on the screen of this view: the rectangle it covers
+## (see SeaBoat.footprint).
+func boat_rect(boat: SeaBoat) -> Rect2:
+    var at := (boat.global_position - camera.get_screen_center_position()) * zoom + size * 0.5
+    var footprint := SeaBoat.footprint(boat.heading, boat.ship.length if boat.ship != null else 1.0)
+    return Rect2(footprint.position + at, footprint.size)
+
+
+## Move the panels of the HUD off the boat (see HudDodge): they jump to their
+## slots at once, since a panel on its way would cross the others, and hide
+## while no slot is free.
+func _keep_clear(boat: SeaBoat) -> void:
+    var idle: Array[bool] = []
+    for panel in _dodgers:
+        idle.append(panel == hint and not hint.showing())
+    slots = HudDodge.dodge(homes, slots, boat_rect(boat), Rect2(Vector2.ZERO, size), reserved, idle)
+    for i in range(_dodgers.size()):
+        var hidden := slots[i] == HudDodge.HIDDEN
+        _dodgers[i].visible = not hidden
+        if not hidden:
+            _dodgers[i].position = slots[i].position

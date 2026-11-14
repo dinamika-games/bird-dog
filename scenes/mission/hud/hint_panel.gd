@@ -37,6 +37,11 @@ func show_tip(text: String) -> void:
     _age = 0.0
 
 
+## Whether the panel shows a tip now.
+func showing() -> bool:
+    return _age < SECONDS and _text != ""
+
+
 func _process(delta: float) -> void:
     if _age < SECONDS:
         _age += delta
