@@ -838,7 +838,7 @@ Along the way, you collect **ducats** (*dukati*), the gold coin everybody on the
 
 ### Earning ducats
 
-* **Floating barrels and small chests** on the water (5 to 15 ducats). They lie a little off the direct route, so it pays to sail a detour.
+* **Floating barrels and small chests** on the water (5 to 15 ducats). They lie a little off the direct route, so it pays to sail a detour. A new one floats up every 24 to 50 seconds of sailing, at most three at once (half as often as at first: the play-tests found the game too easy with them).
 * **The errands** of the ports (25 to 65, the further, the more).
 * **The yataks** give 20 ducats at the end of every mission (once per mission and voyage).
 * **Every task of a mission** (every step but the briefing and the celebration) pays 10 ducats, once, to the boat which did it.

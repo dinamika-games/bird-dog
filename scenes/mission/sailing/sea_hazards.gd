@@ -131,6 +131,11 @@ const MIN_LOOT := 1
 ## A boat closer than this to a barrel picks it up, in kilometres.
 const PICK_KM := 3.0
 
+## A new barrel or chest floats up after this many seconds (at random within
+## the range): half as often as at first, since the play-tests found the game
+## too easy with them.
+const LOOT_SECONDS := Vector2(24.0, 50.0)
+
 ## The corsairs chase a boat closer than this, in kilometres.
 const CHASE_KM := 30.0
 
@@ -849,7 +854,7 @@ func _update_loot(delta: float, helms: Array[Helm], center: Vector2, targets: Ar
     _loot_timer -= delta
     if _loot_timer > 0.0 or _loot.size() >= mini(_sea.barrels, 3):
         return
-    _loot_timer = _rng.randf_range(12.0, 25.0)
+    _loot_timer = _rng.randf_range(LOOT_SECONDS.x, LOOT_SECONDS.y)
 
     # NOTE (mristin):
     # The barrels float a little off the way to the target, so that a detour
