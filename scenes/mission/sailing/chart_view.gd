@@ -20,6 +20,10 @@ const SEA_SHADER := preload("res://scenes/mission/sailing/sea.gdshader")
 ## A boat closer than this to a reef hits it, in kilometres.
 const REEF_KM := 2.5
 
+## How far the middle of a rock stays from the land, in kilometres: the rock
+## and the foam around it, roughened by the shader, never reach the coast.
+const REEF_CLEARANCE_KM := REEF_KM * 1.2
+
 ## The reefs are the same in every mission.
 const REEF_SEED := 1600
 
@@ -322,6 +326,24 @@ func is_clear_line(a: Vector2, b: Vector2) -> bool:
     return true
 
 
+## Whether every point within [param distance] kilometres of the point (in
+## kilometres) is at sea, inside the chart.
+func clear_of_land(km: Vector2, distance: float) -> bool:
+    if is_land(km) or not _bounds_km.grow(-distance).has_point(km):
+        return false
+    for i in range(_land.size()):
+        if not _boxes[i].grow(distance).has_point(km):
+            continue
+        var polygon := _land[i]
+        var count := polygon.size()
+        for j in range(count):
+            var a := polygon[j]
+            var b := polygon[(j + 1) % count]
+            if km.distance_to(Geometry2D.get_closest_point_to_segment(km, a, b)) < distance:
+                return false
+    return true
+
+
 ## Whether a boat at the point (in kilometres) hits a reef.
 func is_reef(km: Vector2) -> bool:
     for reef in reefs:
@@ -337,14 +359,17 @@ func _place_reefs() -> void:
         var center := World.to_km(field.latitude, field.longitude)
         var placed := 0
         var field_rocks := PackedVector2Array()
-        for attempt in range(field.rocks * 20):
+        for attempt in range(field.rocks * 100):
             if placed >= field.rocks:
                 break
             var point := (
                 center
                 + Vector2.RIGHT.rotated(rng.randf() * TAU) * sqrt(rng.randf()) * field.radius_km
             )
-            var free := not is_land(point) and not _near_port(point, 10.0)
+            # NOTE (mristin):
+            # The whole rock with its foam stays at sea: a rock near a coast would
+            # otherwise reach under the land.
+            var free := clear_of_land(point, REEF_CLEARANCE_KM) and not _near_port(point, 10.0)
             for other in reefs:
                 free = free and other.distance_to(point) > REEF_KM * 1.6
             if free:

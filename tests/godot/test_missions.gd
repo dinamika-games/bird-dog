@@ -68,7 +68,20 @@ func _check_ports() -> void:
         var rocks := 0
         for reef in chart.reefs:
             rocks += 1 if reef.distance_to(center) <= field.radius_km + 0.01 else 0
-        _check(rocks >= 3, "the reefs %s have rocks in the sea" % field.id)
+        _check(
+            rocks == field.rocks,
+            (
+                "the reefs %s have all their %d rocks in the sea, not %d"
+                % [field.id, field.rocks, rocks]
+            )
+        )
+    # NOTE (mristin):
+    # A rock near a coast would reach under the land.
+    for reef in chart.reefs:
+        _check(
+            chart.clear_of_land(reef, ChartView.REEF_KM),
+            "the rock of a reef at %s, with its foam, stays clear of the land" % reef
+        )
     chart.free()
 
     var run := MissionRun.new(MissionCatalog.all()[0], 1)

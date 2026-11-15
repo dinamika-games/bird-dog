@@ -6,7 +6,7 @@
 script = ExtResource("1_ext")
 id = "kamenjak"
 name = "the rocks of Cape Kamenjak"
-latitude = 44.745
+latitude = 44.709
 longitude = 13.92
-radius_km = 5.0
+radius_km = 6.0
 rocks = 5

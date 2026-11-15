@@ -6,7 +6,7 @@
 script = ExtResource("1_ext")
 id = "tremiti"
 name = "the rocks of the Tremiti"
-latitude = 42.12
-longitude = 15.52
+latitude = 42.147
+longitude = 15.594
 radius_km = 6.0
 rocks = 6

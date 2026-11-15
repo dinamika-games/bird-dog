@@ -23,6 +23,7 @@ extends RefCounted
 ##   still in the ports and while the game waits, and never sail faster than
 ##   they can;
 ## * the ships and the loot stay on the chart and off the land;
+## * no rock of a reef, with its foam, reaches the land;
 ## * no text shows a placeholder or the forms of a word (e.g., "{port}");
 ## * the days never run backwards, the food and the water stay within the
 ##   hold, the hull's damage within [0, 100], and nobody has fewer than no
@@ -65,6 +66,9 @@ var _last := {}
 
 ## Where the boats of each mission were after the last step, by its id.
 var _steps := {}
+
+## The charts whose reefs were checked already, by their id.
+var _reefs_checked := {}
 
 ## The scenes of the cards checked already, so that each is checked once.
 var _cards_checked := {}
@@ -507,10 +511,16 @@ func _check_moves(mission: Node, tag: String, where: String) -> void:
 
 ## The ships, the loot and the fishing boats stay on the chart, and the ships
 ## and the loot never on the land (the clouds may drift beyond the edge, where
-## the black covers them, see ChartView).
+## the black covers them, see ChartView). No rock of a reef, with its foam,
+## reaches under the land (checked once per chart, since the reefs stay put).
 func _check_hazards(mission: Node, tag: String, where: String) -> void:
     var chart: ChartView = mission._chart
     var bounds := World.bounds_km()
+    if not _reefs_checked.has(chart.get_instance_id()):
+        _reefs_checked[chart.get_instance_id()] = true
+        for rock in chart.reefs:
+            if not chart.clear_of_land(rock, ChartView.REEF_KM):
+                _report("%s: a reef reaches under the land" % tag, "%s: at %s" % [where, rock])
     for mark: Dictionary in mission._hazards.marks():
         var km: Vector2 = mark["km"]
         if mark["kind"] == "cloud":

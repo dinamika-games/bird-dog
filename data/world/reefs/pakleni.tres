@@ -6,7 +6,7 @@
 script = ExtResource("1_ext")
 id = "pakleni"
 name = "the reefs of the Pakleni islands"
-latitude = 43.135
-longitude = 16.33
-radius_km = 5.0
+latitude = 43.153
+longitude = 16.256
+radius_km = 6.0
 rocks = 5

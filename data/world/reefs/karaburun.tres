@@ -6,7 +6,7 @@
 script = ExtResource("1_ext")
 id = "karaburun"
 name = "the rocks of Karaburun"
-latitude = 40.43
-longitude = 19.27
+latitude = 40.394
+longitude = 19.196
 radius_km = 6.0
 rocks = 6

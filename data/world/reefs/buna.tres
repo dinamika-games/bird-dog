@@ -6,7 +6,7 @@
 script = ExtResource("1_ext")
 id = "buna"
 name = "the shallows of the Buna"
-latitude = 41.84
-longitude = 19.33
+latitude = 41.786
+longitude = 19.305
 radius_km = 6.0
 rocks = 6
