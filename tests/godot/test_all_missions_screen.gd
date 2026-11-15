@@ -52,7 +52,7 @@ func _play(mission: Mission, players: int) -> void:
     scene.players = players
     root.add_child(scene)
     await _frames(2)
-    scene._on_shared_action("done")
+    scene._story.on_shared_action("done")
     await _frames(1)
 
     var run: MissionRun = scene._run
@@ -71,7 +71,7 @@ func _play(mission: Mission, players: int) -> void:
             _check(false, "%s: nobody carries what %s needs" % [label, target.id])
             break
         turn += 1
-        scene._arrive(player, target)
+        scene._story.arrive(player, target)
         await _frames(1)
 
     _check(run.is_done(), "%s: the mission ends" % label)
@@ -91,7 +91,7 @@ func _answer_open(scene: Node, run: MissionRun) -> void:
             var choosing: bool = shown["kind"] == "lineup" or str(action).begins_with("answer:")
             if choosing:
                 action = run.step().solution(run)
-            scene._on_action(action, player)
+            scene._story.on_action(action, player)
             await _frames(1)
 
 

@@ -579,7 +579,7 @@ func check_steps(mission: Node, tag: String) -> void:
             ]
         )
         # NOTE (mristin):
-        # A boat in a port is set out from there (see Mission._launch): it
+        # A boat in a port is set out from there (see MissionBuilder.launch): it
         # jumps, and its jump is no sailing.
         if before["busy"] or state["busy"]:
             if before["busy"] and state["busy"] and before["port"] == state["port"]:

@@ -37,7 +37,7 @@ func _run() -> void:
     await _frames(2)
 
     _check(scene._all_paused, "the mission starts with the briefing for both")
-    scene._on_shared_action("done")
+    scene._story.on_shared_action("done")
     await _frames(2)
     _check(
         scene._busy[0] and scene._busy[1], "after the briefing, both crews are in the start port"
@@ -45,8 +45,8 @@ func _run() -> void:
     var start: Array = scene._port_scenes[0]["buttons"]
     _check(start.size() == 4 and start[1]["action"] == "shop", "the start port has a merchant")
     _check(start[3]["action"] == "bay", "from Kotor, the crew can sail on to Herceg Novi")
-    scene._on_action("leave", 0)
-    scene._on_action("leave", 1)
+    scene._story.on_action("leave", 0)
+    scene._story.on_action("leave", 1)
     await _frames(2)
     _check(not scene._busy[0] and not scene._busy[1], "then both set sail")
     _check(not scene._all_paused, "after the briefing, the crew sails")
@@ -64,7 +64,7 @@ func _run() -> void:
     await _frames(120)
 
     var run: MissionRun = scene._run
-    scene._arrive(0, World.port("ulcinj"))
+    scene._story.arrive(0, World.port("ulcinj"))
     await _frames(1)
     _check(scene._busy[0] and not scene._busy[1], "the port opens only for the player who entered")
     var buttons: Array = scene._port_scenes[0]["buttons"]
@@ -74,39 +74,39 @@ func _run() -> void:
     # buy at least one of its boosters (not every one: a booster for the leg
     # may be held already, or a ration may not fit into the barrels).
     run.hold(0).ducats += 500
-    scene._on_action("shop", 0)
+    scene._story.on_action("shop", 0)
     await _frames(1)
     var stall: Dictionary = scene._cards[0].scene()
     _check(stall["kind"] == "shop", "the merchant shows the stall")
     var buyable: int = stall["reasons"].find("")
     _check(buyable >= 0, "the crew can buy something at the stall")
     var before := run.bag.purse()
-    scene._on_action("buy:%d" % buyable, 0)
+    scene._story.on_action("buy:%d" % buyable, 0)
     await _frames(1)
     _check(run.bag.purse() < before, "buying costs ducats")
-    scene._on_action("close_shop", 0)
+    scene._story.on_action("close_shop", 0)
     await _frames(1)
     _check(scene._cards[0].scene()["kind"] == "talk", "closing the stall returns to the port")
     _check(buttons.size() == 3 and buttons[2]["action"] == "errand", "the port has work")
-    scene._on_action("errand", 0)
+    scene._story.on_action("errand", 0)
     await _frames(1)
     var offer: Dictionary = scene._offers[0]
     _check(not offer.is_empty(), "the local offers an errand")
-    scene._on_action("errand_yes", 0)
+    scene._story.on_action("errand_yes", 0)
     await _frames(1)
     _check(
         run.errands.size() == 1 and run.hold(0).cargo.has(offer["item"]), "the boat takes the goods"
     )
-    scene._on_action(buttons[0]["action"], 0)
+    scene._story.on_action(buttons[0]["action"], 0)
     await _frames(2)
     if scene._busy[0]:
-        scene._resume(0)
+        scene._story.resume(0)
     var ducats_before := run.hold(0).ducats
-    scene._arrive(0, World.port(offer["port"]))
+    scene._story.arrive(0, World.port(offer["port"]))
     await _frames(1)
     _check(run.errands.is_empty(), "the errand is done in its port")
     _check(run.hold(0).ducats == ducats_before + offer["reward"], "and the boat is paid")
-    scene._resume(0)
+    scene._story.resume(0)
 
     run.hold(1).provisions = 0.0
     await _frames(2)
@@ -120,7 +120,7 @@ func _run() -> void:
             break
         await process_frame
     _check(scene._busy[1] and run.hold(1).provisions > 0.0, "the towed boat arrives in the port")
-    scene._resume(1)
+    scene._story.resume(1)
 
     run.hold(0).cargo.append("sail")
     run.hold(0).ducats = 40
@@ -133,7 +133,7 @@ func _run() -> void:
     # port while the second was towed; both sail on with full rations.
     for i in range(2):
         if scene._busy[i]:
-            scene._resume(i)
+            scene._story.resume(i)
         run.hold(i).provisions = run.hold(i).max_provisions
     var open_sea := World.to_km(41.6, 18.6)
     scene._helms[0].km = open_sea
@@ -158,7 +158,7 @@ func _run() -> void:
     for port: Port in one_way:
         var wanted := deg_to_rad(port.leave_heading)
         scene._entry_headings[0] = wanted + PI
-        scene._launch(port, 0)
+        MissionBuilder.launch(scene, port, 0)
         var helm: Helm = scene._helms[0]
         _check(
             (
@@ -168,7 +168,7 @@ func _run() -> void:
             "a boat leaves %s the way the port sends it, clear of the land and the reefs" % port.id
         )
 
-    scene._ask_to_leave()
+    scene._sailing.ask_to_leave()
     await _frames(1)
     _check(scene._all_paused and scene._leave_dialog != null, "Esc asks before leaving")
     scene._leave_dialog._cancel()
@@ -204,16 +204,16 @@ func _check_saving(session: Node) -> void:
     first.players = 1
     root.add_child(first)
     await _frames(2)
-    first._on_shared_action("done")
+    first._story.on_shared_action("done")
     await _frames(2)
-    first._on_action("leave", 0)
+    first._story.on_action("leave", 0)
     await _frames(2)
     # NOTE (mristin):
     # The route of the trail is drawn anew for every mission; its first port.
     var trail_port := World.port(first._run.plan["trail"]["route"][0])
     first._helms[0].km = World.port_km(trail_port) + Vector2(-20, 10)
     first._run.hold(0).cargo.append("goods_wine")
-    first._arrive(0, trail_port)
+    first._story.arrive(0, trail_port)
     await _frames(1)
     var days: float = first._run.days
     _check(session.progress_of() == "bell_of_grebastica", "a port saves the mission in progress")

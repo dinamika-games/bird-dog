@@ -84,9 +84,9 @@ func _look(players: int) -> void:
     scene.players = players
     root.add_child(scene)
     await process_frame
-    scene._on_shared_action("done")
+    scene._story.on_shared_action("done")
     for i in range(players):
-        scene._on_action("leave", i)
+        scene._story.on_action("leave", i)
     await process_frame
     # NOTE (mristin):
     # The world stands still meanwhile, and the HUD hides: only the chart is
@@ -102,7 +102,7 @@ func _look(players: int) -> void:
         for helm in scene._helms:
             helm.km = at + Vector2(helm.player * 0.3, 0.0)
             helm.heading = (World.bounds_km().get_center() - at).angle() + PI / 2
-        scene._place_boats(true)
+        scene._sailing.place_boats(true)
         # NOTE (mristin):
         # The boats jump from place to place: their wakes would trail
         # across the chart.

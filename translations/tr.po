@@ -650,87 +650,6 @@ msgstr "{wind} geliyor!"
 msgid "You have {ducats} {ducats|ducat|ducats}."
 msgstr "{ducats} dukanız var."
 
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Fair winds, captain! Do you need anything before you set sail?"
-msgstr "Rüzgarınız bol olsun, {crew|kaptan|kaptan|kaptanlar}! Yola çıkmadan önce bir şey lazım mı?"
-
-#. the label of a button
-#: scenes/mission/mission.gd scenes/missions/steps/briefing_step.gd
-#, fuzzy
-msgid "Set sail!"
-msgstr "Yelken açın!"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "What would you like, captain?"
-msgstr "Ne istersiniz, {crew|kaptan|kaptan|kaptanlar}?"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "A fine choice, captain! {booster} is yours."
-msgstr "İyi seçim, {crew|kaptan|kaptan|kaptanlar}! {booster} artık sizin."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "+{ducats} {ducats|ducat|ducats} for the task done!"
-msgstr "Tamamlanan iş için +{ducats} duka!"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Leave the mission? It is saved, and you can continue later."
-msgstr "Görevden çıkılsın mı? Kaydedildi, sonra devam edebilirsiniz."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Yes, leave"
-msgstr "Evet, çık"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "No, sail on"
-msgstr "Hayır, devam"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Out of food and water! Fishermen tow you to {port}."
-msgstr "Yiyecek ve su bitti! Balıkçılar sizi {port@to} çekiyor."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Out of food and water! A fishing boat towed you to {port}."
-msgstr "Yiyecek ve su bitti! Bir balıkçı teknesi sizi {port@to} çekti."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "The hull is broken! Fishermen tow you to {port}."
-msgstr "Gövde kırıldı! Balıkçılar sizi {port@to} çekiyor."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "The hull is broken! A fishing boat towed you to {port}."
-msgstr "Gövde kırıldı! Bir balıkçı teknesi sizi {port@to} çekti."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Running low! Stop in a port!"
-msgstr "Erzak azalıyor! Bir limana uğrayın!"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Buoy {number} rounded!"
-msgstr "{number}. şamandıra dönüldü!"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Crash! A reef! The hull is damaged."
-msgstr "Çatırt! Bir resif! Gövde hasar gördü."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Crash! The cliffs! The hull is damaged."
-msgstr "Çatırt! Kayalıklar! Gövde hasar gördü."
-
 #: scenes/mission/mission_complete.gd scenes/shipyard/shipyard.gd
 #, fuzzy
 msgid "Back to the missions"
@@ -790,6 +709,87 @@ msgstr "Görevi bitir (deneme)"
 #, fuzzy
 msgid "This mission is still being built."
 msgstr "Bu görev daha yapım aşamasında."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Leave the mission? It is saved, and you can continue later."
+msgstr "Görevden çıkılsın mı? Kaydedildi, sonra devam edebilirsiniz."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Yes, leave"
+msgstr "Evet, çık"
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "No, sail on"
+msgstr "Hayır, devam"
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Out of food and water! Fishermen tow you to {port}."
+msgstr "Yiyecek ve su bitti! Balıkçılar sizi {port@to} çekiyor."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Out of food and water! A fishing boat towed you to {port}."
+msgstr "Yiyecek ve su bitti! Bir balıkçı teknesi sizi {port@to} çekti."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "The hull is broken! Fishermen tow you to {port}."
+msgstr "Gövde kırıldı! Balıkçılar sizi {port@to} çekiyor."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "The hull is broken! A fishing boat towed you to {port}."
+msgstr "Gövde kırıldı! Bir balıkçı teknesi sizi {port@to} çekti."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Running low! Stop in a port!"
+msgstr "Erzak azalıyor! Bir limana uğrayın!"
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Buoy {number} rounded!"
+msgstr "{number}. şamandıra dönüldü!"
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Crash! A reef! The hull is damaged."
+msgstr "Çatırt! Bir resif! Gövde hasar gördü."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Crash! The cliffs! The hull is damaged."
+msgstr "Çatırt! Kayalıklar! Gövde hasar gördü."
+
+#: scenes/mission/mission_story.gd
+#, fuzzy
+msgid "Fair winds, captain! Do you need anything before you set sail?"
+msgstr "Rüzgarınız bol olsun, {crew|kaptan|kaptan|kaptanlar}! Yola çıkmadan önce bir şey lazım mı?"
+
+#. the label of a button
+#: scenes/mission/mission_story.gd scenes/missions/steps/briefing_step.gd
+#, fuzzy
+msgid "Set sail!"
+msgstr "Yelken açın!"
+
+#: scenes/mission/mission_story.gd
+#, fuzzy
+msgid "What would you like, captain?"
+msgstr "Ne istersiniz, {crew|kaptan|kaptan|kaptanlar}?"
+
+#: scenes/mission/mission_story.gd
+#, fuzzy
+msgid "A fine choice, captain! {booster} is yours."
+msgstr "İyi seçim, {crew|kaptan|kaptan|kaptanlar}! {booster} artık sizin."
+
+#: scenes/mission/mission_story.gd
+#, fuzzy
+msgid "+{ducats} {ducats|ducat|ducats} for the task done!"
+msgstr "Tamamlanan iş için +{ducats} duka!"
 
 #. {mission} is the title of the mission
 #: scenes/mission/port_scene.gd

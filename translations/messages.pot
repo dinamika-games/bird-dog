@@ -516,71 +516,6 @@ msgstr ""
 msgid "You have {ducats} {ducats|ducat|ducats}."
 msgstr ""
 
-#: scenes/mission/mission.gd
-msgid "Fair winds, captain! Do you need anything before you set sail?"
-msgstr ""
-
-#. the label of a button
-#: scenes/mission/mission.gd scenes/missions/steps/briefing_step.gd
-msgid "Set sail!"
-msgstr ""
-
-#: scenes/mission/mission.gd
-msgid "What would you like, captain?"
-msgstr ""
-
-#: scenes/mission/mission.gd
-msgid "A fine choice, captain! {booster} is yours."
-msgstr ""
-
-#: scenes/mission/mission.gd
-msgid "+{ducats} {ducats|ducat|ducats} for the task done!"
-msgstr ""
-
-#: scenes/mission/mission.gd
-msgid "Leave the mission? It is saved, and you can continue later."
-msgstr ""
-
-#: scenes/mission/mission.gd
-msgid "Yes, leave"
-msgstr ""
-
-#: scenes/mission/mission.gd
-msgid "No, sail on"
-msgstr ""
-
-#: scenes/mission/mission.gd
-msgid "Out of food and water! Fishermen tow you to {port}."
-msgstr ""
-
-#: scenes/mission/mission.gd
-msgid "Out of food and water! A fishing boat towed you to {port}."
-msgstr ""
-
-#: scenes/mission/mission.gd
-msgid "The hull is broken! Fishermen tow you to {port}."
-msgstr ""
-
-#: scenes/mission/mission.gd
-msgid "The hull is broken! A fishing boat towed you to {port}."
-msgstr ""
-
-#: scenes/mission/mission.gd
-msgid "Running low! Stop in a port!"
-msgstr ""
-
-#: scenes/mission/mission.gd
-msgid "Buoy {number} rounded!"
-msgstr ""
-
-#: scenes/mission/mission.gd
-msgid "Crash! A reef! The hull is damaged."
-msgstr ""
-
-#: scenes/mission/mission.gd
-msgid "Crash! The cliffs! The hull is damaged."
-msgstr ""
-
 #: scenes/mission/mission_complete.gd scenes/shipyard/shipyard.gd
 msgid "Back to the missions"
 msgstr ""
@@ -627,6 +562,71 @@ msgstr ""
 
 #: scenes/mission/mission_placeholder.gd
 msgid "This mission is still being built."
+msgstr ""
+
+#: scenes/mission/mission_sailing.gd
+msgid "Leave the mission? It is saved, and you can continue later."
+msgstr ""
+
+#: scenes/mission/mission_sailing.gd
+msgid "Yes, leave"
+msgstr ""
+
+#: scenes/mission/mission_sailing.gd
+msgid "No, sail on"
+msgstr ""
+
+#: scenes/mission/mission_sailing.gd
+msgid "Out of food and water! Fishermen tow you to {port}."
+msgstr ""
+
+#: scenes/mission/mission_sailing.gd
+msgid "Out of food and water! A fishing boat towed you to {port}."
+msgstr ""
+
+#: scenes/mission/mission_sailing.gd
+msgid "The hull is broken! Fishermen tow you to {port}."
+msgstr ""
+
+#: scenes/mission/mission_sailing.gd
+msgid "The hull is broken! A fishing boat towed you to {port}."
+msgstr ""
+
+#: scenes/mission/mission_sailing.gd
+msgid "Running low! Stop in a port!"
+msgstr ""
+
+#: scenes/mission/mission_sailing.gd
+msgid "Buoy {number} rounded!"
+msgstr ""
+
+#: scenes/mission/mission_sailing.gd
+msgid "Crash! A reef! The hull is damaged."
+msgstr ""
+
+#: scenes/mission/mission_sailing.gd
+msgid "Crash! The cliffs! The hull is damaged."
+msgstr ""
+
+#: scenes/mission/mission_story.gd
+msgid "Fair winds, captain! Do you need anything before you set sail?"
+msgstr ""
+
+#. the label of a button
+#: scenes/mission/mission_story.gd scenes/missions/steps/briefing_step.gd
+msgid "Set sail!"
+msgstr ""
+
+#: scenes/mission/mission_story.gd
+msgid "What would you like, captain?"
+msgstr ""
+
+#: scenes/mission/mission_story.gd
+msgid "A fine choice, captain! {booster} is yours."
+msgstr ""
+
+#: scenes/mission/mission_story.gd
+msgid "+{ducats} {ducats|ducat|ducats} for the task done!"
 msgstr ""
 
 #. {mission} is the title of the mission

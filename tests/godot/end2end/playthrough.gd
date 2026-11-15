@@ -253,7 +253,7 @@ func _play_mission(mission: Node) -> void:
             if playing > MISSION_SECONDS and not _here.has("left"):
                 _check(false, "%s: the captains did not finish in %d s" % [tag, MISSION_SECONDS])
                 _here["left"] = true
-                mission._leave_now()
+                mission._sailing.leave_now()
             if _tracing and frame % 300 == 0:
                 _trace(mission, bots, tag)
         if frame % CHECK_EVERY == 0 and is_instance_valid(mission) and current_scene == mission:

@@ -58,7 +58,7 @@ func _play(players: int) -> void:
     scene.players = players
     root.add_child(scene)
     await _frames(2)
-    scene._on_shared_action("done")
+    scene._story.on_shared_action("done")
     await _frames(3)
     for i in range(players):
         _check(scene._busy[i], "%d players: crew %d is in the start port" % [players, i])

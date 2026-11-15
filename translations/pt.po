@@ -648,88 +648,6 @@ msgstr "{wind} a caminho!"
 msgid "You have {ducats} {ducats|ducat|ducats}."
 msgstr "Têm {ducats} {ducats|ducado|ducados}."
 
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Fair winds, captain! Do you need anything before you set sail?"
-msgstr ""
-"Bons ventos, {crew|capitão|capitã|capitães|capitãs}! Precisam de alguma coisa antes de zarpar?"
-
-#. the label of a button
-#: scenes/mission/mission.gd scenes/missions/steps/briefing_step.gd
-#, fuzzy
-msgid "Set sail!"
-msgstr "Zarpar!"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "What would you like, captain?"
-msgstr "O que desejam, {crew|capitão|capitã|capitães|capitãs}?"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "A fine choice, captain! {booster} is yours."
-msgstr "Boa escolha, {crew|capitão|capitã|capitães|capitãs}! Agora têm: {booster}."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "+{ducats} {ducats|ducat|ducats} for the task done!"
-msgstr "+{ducats} {ducats|ducado|ducados} pela tarefa cumprida!"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Leave the mission? It is saved, and you can continue later."
-msgstr "Sair da missão? Fica guardada e podem continuar mais tarde."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Yes, leave"
-msgstr "Sim, sair"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "No, sail on"
-msgstr "Não, seguir viagem"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Out of food and water! Fishermen tow you to {port}."
-msgstr "Sem comida nem água! Os pescadores rebocam-vos {port@to}."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Out of food and water! A fishing boat towed you to {port}."
-msgstr "Sem comida nem água! Um barco de pesca rebocou-vos {port@to}."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "The hull is broken! Fishermen tow you to {port}."
-msgstr "O casco partiu-se! Os pescadores rebocam-vos {port@to}."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "The hull is broken! A fishing boat towed you to {port}."
-msgstr "O casco partiu-se! Um barco de pesca rebocou-vos {port@to}."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Running low! Stop in a port!"
-msgstr "Quase sem mantimentos! Parem num porto!"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Buoy {number} rounded!"
-msgstr "Boia {number} contornada!"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Crash! A reef! The hull is damaged."
-msgstr "Catrapum! Um recife! O casco está danificado."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Crash! The cliffs! The hull is damaged."
-msgstr "Catrapum! As falésias! O casco está danificado."
-
 #: scenes/mission/mission_complete.gd scenes/shipyard/shipyard.gd
 #, fuzzy
 msgid "Back to the missions"
@@ -789,6 +707,88 @@ msgstr "Terminar a missão (teste)"
 #, fuzzy
 msgid "This mission is still being built."
 msgstr "Esta missão ainda está em construção."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Leave the mission? It is saved, and you can continue later."
+msgstr "Sair da missão? Fica guardada e podem continuar mais tarde."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Yes, leave"
+msgstr "Sim, sair"
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "No, sail on"
+msgstr "Não, seguir viagem"
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Out of food and water! Fishermen tow you to {port}."
+msgstr "Sem comida nem água! Os pescadores rebocam-vos {port@to}."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Out of food and water! A fishing boat towed you to {port}."
+msgstr "Sem comida nem água! Um barco de pesca rebocou-vos {port@to}."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "The hull is broken! Fishermen tow you to {port}."
+msgstr "O casco partiu-se! Os pescadores rebocam-vos {port@to}."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "The hull is broken! A fishing boat towed you to {port}."
+msgstr "O casco partiu-se! Um barco de pesca rebocou-vos {port@to}."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Running low! Stop in a port!"
+msgstr "Quase sem mantimentos! Parem num porto!"
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Buoy {number} rounded!"
+msgstr "Boia {number} contornada!"
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Crash! A reef! The hull is damaged."
+msgstr "Catrapum! Um recife! O casco está danificado."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Crash! The cliffs! The hull is damaged."
+msgstr "Catrapum! As falésias! O casco está danificado."
+
+#: scenes/mission/mission_story.gd
+#, fuzzy
+msgid "Fair winds, captain! Do you need anything before you set sail?"
+msgstr ""
+"Bons ventos, {crew|capitão|capitã|capitães|capitãs}! Precisam de alguma coisa antes de zarpar?"
+
+#. the label of a button
+#: scenes/mission/mission_story.gd scenes/missions/steps/briefing_step.gd
+#, fuzzy
+msgid "Set sail!"
+msgstr "Zarpar!"
+
+#: scenes/mission/mission_story.gd
+#, fuzzy
+msgid "What would you like, captain?"
+msgstr "O que desejam, {crew|capitão|capitã|capitães|capitãs}?"
+
+#: scenes/mission/mission_story.gd
+#, fuzzy
+msgid "A fine choice, captain! {booster} is yours."
+msgstr "Boa escolha, {crew|capitão|capitã|capitães|capitãs}! Agora têm: {booster}."
+
+#: scenes/mission/mission_story.gd
+#, fuzzy
+msgid "+{ducats} {ducats|ducat|ducats} for the task done!"
+msgstr "+{ducats} {ducats|ducado|ducados} pela tarefa cumprida!"
 
 #. {mission} is the title of the mission
 #: scenes/mission/port_scene.gd

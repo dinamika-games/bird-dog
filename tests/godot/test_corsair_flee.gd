@@ -94,9 +94,9 @@ func _run() -> void:
     root.add_child(scene)
     await process_frame
     await process_frame
-    scene._on_shared_action("done")
+    scene._story.on_shared_action("done")
     await process_frame
-    scene._on_action("leave", 0)
+    scene._story.on_action("leave", 0)
     await process_frame
 
     # NOTE (mristin):

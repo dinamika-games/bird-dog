@@ -652,92 +652,6 @@ msgstr "Ide {wind}!"
 msgid "You have {ducats} {ducats|ducat|ducats}."
 msgstr "{crew|Imaš|Imaš|Imate} {ducats} {ducats|dukat|dukata|dukata}."
 
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Fair winds, captain! Do you need anything before you set sail?"
-msgstr ""
-"Dobar vitar, {crew|kapetane|kapetanice|kapetani|kapetanice}! {crew|Triba li ti ča prin nego "
-"odjidriš|Triba li ti ča prin nego odjidriš|Triba li van ča prin nego odjidrite}?"
-
-#. the label of a button
-#: scenes/mission/mission.gd scenes/missions/steps/briefing_step.gd
-#, fuzzy
-msgid "Set sail!"
-msgstr "Digni idro!"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "What would you like, captain?"
-msgstr ""
-"Ča {crew|bi tija|bi tila|biste tili|biste tile}, {crew|kapetane|kapetanice|kapetani|kapetanice}?"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "A fine choice, captain! {booster} is yours."
-msgstr ""
-"Lipi izbor, {crew|kapetane|kapetanice|kapetani|kapetanice}! Sad je {crew|tvoje|tvoje|vaše}: "
-"{booster}."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "+{ducats} {ducats|ducat|ducats} for the task done!"
-msgstr "+{ducats} {ducats|dukat|dukata|dukata} za obavljeni posal!"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Leave the mission? It is saved, and you can continue later."
-msgstr "Napustit misiju? Sačuvana je, {crew|moći ćeš|moći ćeš|moći ćete} nastavit kasnije."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Yes, leave"
-msgstr "Da, napusti"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "No, sail on"
-msgstr "Ne, jidrimo dalje"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Out of food and water! Fishermen tow you to {port}."
-msgstr "Nima više spize ni vode! Ribari {crew|te|te|vas} tegle {port@to}."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Out of food and water! A fishing boat towed you to {port}."
-msgstr "Nima više spize ni vode! Ribarska brodica {crew|te|te|vas} je doteglila {port@to}."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "The hull is broken! Fishermen tow you to {port}."
-msgstr "Trup je razbijen! Ribari {crew|te|te|vas} tegle {port@to}."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "The hull is broken! A fishing boat towed you to {port}."
-msgstr "Trup je razbijen! Ribarska brodica {crew|te|te|vas} je doteglila {port@to}."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Running low! Stop in a port!"
-msgstr "Spize je malo! {crew|Stani|Stani|Stanite} u portu!"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Buoy {number} rounded!"
-msgstr "Bova {number} obiđena!"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Crash! A reef! The hull is damaged."
-msgstr "Tras! Hrid! Trup je oštećen."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Crash! The cliffs! The hull is damaged."
-msgstr "Tras! Litice! Trup je oštećen."
-
 #: scenes/mission/mission_complete.gd scenes/shipyard/shipyard.gd
 #, fuzzy
 msgid "Back to the missions"
@@ -799,6 +713,92 @@ msgstr "Završi misiju (test)"
 #, fuzzy
 msgid "This mission is still being built."
 msgstr "Ova misija se još gradi."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Leave the mission? It is saved, and you can continue later."
+msgstr "Napustit misiju? Sačuvana je, {crew|moći ćeš|moći ćeš|moći ćete} nastavit kasnije."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Yes, leave"
+msgstr "Da, napusti"
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "No, sail on"
+msgstr "Ne, jidrimo dalje"
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Out of food and water! Fishermen tow you to {port}."
+msgstr "Nima više spize ni vode! Ribari {crew|te|te|vas} tegle {port@to}."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Out of food and water! A fishing boat towed you to {port}."
+msgstr "Nima više spize ni vode! Ribarska brodica {crew|te|te|vas} je doteglila {port@to}."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "The hull is broken! Fishermen tow you to {port}."
+msgstr "Trup je razbijen! Ribari {crew|te|te|vas} tegle {port@to}."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "The hull is broken! A fishing boat towed you to {port}."
+msgstr "Trup je razbijen! Ribarska brodica {crew|te|te|vas} je doteglila {port@to}."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Running low! Stop in a port!"
+msgstr "Spize je malo! {crew|Stani|Stani|Stanite} u portu!"
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Buoy {number} rounded!"
+msgstr "Bova {number} obiđena!"
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Crash! A reef! The hull is damaged."
+msgstr "Tras! Hrid! Trup je oštećen."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Crash! The cliffs! The hull is damaged."
+msgstr "Tras! Litice! Trup je oštećen."
+
+#: scenes/mission/mission_story.gd
+#, fuzzy
+msgid "Fair winds, captain! Do you need anything before you set sail?"
+msgstr ""
+"Dobar vitar, {crew|kapetane|kapetanice|kapetani|kapetanice}! {crew|Triba li ti ča prin nego "
+"odjidriš|Triba li ti ča prin nego odjidriš|Triba li van ča prin nego odjidrite}?"
+
+#. the label of a button
+#: scenes/mission/mission_story.gd scenes/missions/steps/briefing_step.gd
+#, fuzzy
+msgid "Set sail!"
+msgstr "Digni idro!"
+
+#: scenes/mission/mission_story.gd
+#, fuzzy
+msgid "What would you like, captain?"
+msgstr ""
+"Ča {crew|bi tija|bi tila|biste tili|biste tile}, {crew|kapetane|kapetanice|kapetani|kapetanice}?"
+
+#: scenes/mission/mission_story.gd
+#, fuzzy
+msgid "A fine choice, captain! {booster} is yours."
+msgstr ""
+"Lipi izbor, {crew|kapetane|kapetanice|kapetani|kapetanice}! Sad je {crew|tvoje|tvoje|vaše}: "
+"{booster}."
+
+#: scenes/mission/mission_story.gd
+#, fuzzy
+msgid "+{ducats} {ducats|ducat|ducats} for the task done!"
+msgstr "+{ducats} {ducats|dukat|dukata|dukata} za obavljeni posal!"
 
 #. {mission} is the title of the mission
 #: scenes/mission/port_scene.gd

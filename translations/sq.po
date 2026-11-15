@@ -647,87 +647,6 @@ msgstr "Vjen era {wind}!"
 msgid "You have {ducats} {ducats|ducat|ducats}."
 msgstr "Keni {ducats} {ducats|dukat|dukatë}."
 
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Fair winds, captain! Do you need anything before you set sail?"
-msgstr "Erë të mbarë, {crew|kapiten|kapitene|kapitenë|kapitene}! Ju duhet diçka para se të niseni?"
-
-#. the label of a button
-#: scenes/mission/mission.gd scenes/missions/steps/briefing_step.gd
-#, fuzzy
-msgid "Set sail!"
-msgstr "Ngrini velat!"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "What would you like, captain?"
-msgstr "Çfarë dëshironi, {crew|kapiten|kapitene|kapitenë|kapitene}?"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "A fine choice, captain! {booster} is yours."
-msgstr "Zgjedhje e mirë, {crew|kapiten|kapitene|kapitenë|kapitene}! Tani keni: {booster}."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "+{ducats} {ducats|ducat|ducats} for the task done!"
-msgstr "+{ducats} {ducats|dukat|dukatë} për detyrën e kryer!"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Leave the mission? It is saved, and you can continue later."
-msgstr "Ta lini misionin? Është ruajtur, mund të vazhdoni më vonë."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Yes, leave"
-msgstr "Po, dalim"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "No, sail on"
-msgstr "Jo, vazhdojmë"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Out of food and water! Fishermen tow you to {port}."
-msgstr "Mbaroi ushqimi dhe uji! Peshkatarët ju tërheqin {port@to}."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Out of food and water! A fishing boat towed you to {port}."
-msgstr "Mbaroi ushqimi dhe uji! Një barkë peshkatarësh ju tërhoqi {port@to}."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "The hull is broken! Fishermen tow you to {port}."
-msgstr "Barka u thye! Peshkatarët ju tërheqin {port@to}."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "The hull is broken! A fishing boat towed you to {port}."
-msgstr "Barka u thye! Një barkë peshkatarësh ju tërhoqi {port@to}."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Running low! Stop in a port!"
-msgstr "Rezervat po mbarojnë! Ndaluni në një port!"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Buoy {number} rounded!"
-msgstr "Bova {number} u rrethua!"
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Crash! A reef! The hull is damaged."
-msgstr "Bam! Një shkëmb nënujor! Barka u dëmtua."
-
-#: scenes/mission/mission.gd
-#, fuzzy
-msgid "Crash! The cliffs! The hull is damaged."
-msgstr "Bam! Shkrepat! Barka u dëmtua."
-
 #: scenes/mission/mission_complete.gd scenes/shipyard/shipyard.gd
 #, fuzzy
 msgid "Back to the missions"
@@ -787,6 +706,87 @@ msgstr "Përfundo misionin (test)"
 #, fuzzy
 msgid "This mission is still being built."
 msgstr "Ky mision është ende në ndërtim."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Leave the mission? It is saved, and you can continue later."
+msgstr "Ta lini misionin? Është ruajtur, mund të vazhdoni më vonë."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Yes, leave"
+msgstr "Po, dalim"
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "No, sail on"
+msgstr "Jo, vazhdojmë"
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Out of food and water! Fishermen tow you to {port}."
+msgstr "Mbaroi ushqimi dhe uji! Peshkatarët ju tërheqin {port@to}."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Out of food and water! A fishing boat towed you to {port}."
+msgstr "Mbaroi ushqimi dhe uji! Një barkë peshkatarësh ju tërhoqi {port@to}."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "The hull is broken! Fishermen tow you to {port}."
+msgstr "Barka u thye! Peshkatarët ju tërheqin {port@to}."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "The hull is broken! A fishing boat towed you to {port}."
+msgstr "Barka u thye! Një barkë peshkatarësh ju tërhoqi {port@to}."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Running low! Stop in a port!"
+msgstr "Rezervat po mbarojnë! Ndaluni në një port!"
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Buoy {number} rounded!"
+msgstr "Bova {number} u rrethua!"
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Crash! A reef! The hull is damaged."
+msgstr "Bam! Një shkëmb nënujor! Barka u dëmtua."
+
+#: scenes/mission/mission_sailing.gd
+#, fuzzy
+msgid "Crash! The cliffs! The hull is damaged."
+msgstr "Bam! Shkrepat! Barka u dëmtua."
+
+#: scenes/mission/mission_story.gd
+#, fuzzy
+msgid "Fair winds, captain! Do you need anything before you set sail?"
+msgstr "Erë të mbarë, {crew|kapiten|kapitene|kapitenë|kapitene}! Ju duhet diçka para se të niseni?"
+
+#. the label of a button
+#: scenes/mission/mission_story.gd scenes/missions/steps/briefing_step.gd
+#, fuzzy
+msgid "Set sail!"
+msgstr "Ngrini velat!"
+
+#: scenes/mission/mission_story.gd
+#, fuzzy
+msgid "What would you like, captain?"
+msgstr "Çfarë dëshironi, {crew|kapiten|kapitene|kapitenë|kapitene}?"
+
+#: scenes/mission/mission_story.gd
+#, fuzzy
+msgid "A fine choice, captain! {booster} is yours."
+msgstr "Zgjedhje e mirë, {crew|kapiten|kapitene|kapitenë|kapitene}! Tani keni: {booster}."
+
+#: scenes/mission/mission_story.gd
+#, fuzzy
+msgid "+{ducats} {ducats|ducat|ducats} for the task done!"
+msgstr "+{ducats} {ducats|dukat|dukatë} për detyrën e kryer!"
 
 #. {mission} is the title of the mission
 #: scenes/mission/port_scene.gd

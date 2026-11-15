@@ -62,7 +62,7 @@ func _soak(mission: Mission, players: int) -> void:
     scene.players = players
     root.add_child(scene)
     await process_frame
-    scene._on_shared_action("done")
+    scene._story.on_shared_action("done")
 
     var last: Array[Vector2] = []
     var stuck: Array[int] = []
@@ -81,11 +81,19 @@ func _soak(mission: Mission, players: int) -> void:
                 var moved: float = helm.km.distance_to(last[helm.player])
                 var sailing: bool = not scene._busy[helm.player]
                 stuck[helm.player] = stuck[helm.player] + 1 if sailing and moved < MOVED_KM else 0
-                _check(stuck[helm.player] < STUCK_WINDOWS, "%s: boat %d is stuck at %s" % [label, helm.player + 1, helm.km])
+                _check(
+                    stuck[helm.player] < STUCK_WINDOWS,
+                    "%s: boat %d is stuck at %s" % [label, helm.player + 1, helm.km]
+                )
                 last[helm.player] = helm.km
         if step % 10 == 0:
             await process_frame
-    print("%s: %d scenes, at most %d hazards, %.1f days" % [label, ports, most_hazards, scene._run.days])
+    print(
+        (
+            "%s: %d scenes, at most %d hazards, %.1f days"
+            % [label, ports, most_hazards, scene._run.days]
+        )
+    )
     _check(most_hazards < 40, "%s: the hazards pile up (%d)" % [label, most_hazards])
     scene.free()
     await process_frame
@@ -102,10 +110,16 @@ func _answer(scene: Node) -> int:
                 break
             var shown: Dictionary = scene._cards[player].scene()
             var action := "leave"
-            if shown["kind"] == "lineup" or (shown["kind"] == "talk" and str(shown["buttons"][0]["action"]).begins_with("answer:")):
+            if (
+                shown["kind"] == "lineup"
+                or (
+                    shown["kind"] == "talk"
+                    and str(shown["buttons"][0]["action"]).begins_with("answer:")
+                )
+            ):
                 action = scene._run.step().solution(scene._run)
             elif shown["kind"] == "talk":
                 action = shown["buttons"][0]["action"]
-            scene._on_action(action, player)
+            scene._story.on_action(action, player)
             count += 1
     return count
