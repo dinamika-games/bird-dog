@@ -91,7 +91,9 @@ func _check_latest_played() -> void:
     await _check_select(1, file)
 
     # NOTE (mristin):
-    # The crew plays on, mission by mission, into chapters 2 and 3.
+    # The crew plays on, mission by mission, into chapters 2 and 3; every
+    # chapter starts anew with its own possessions.
+    var chapter_1_ducats := 0
     for mission in missions.slice(next.number - 1):
         _check(_session.is_unlocked(mission), "%s: %s is open in its turn" % [file, mission.id])
         var run := MissionRun.new(mission, 3)
@@ -99,25 +101,41 @@ func _check_latest_played() -> void:
         var stars := _play(run, file)
         _session.complete(mission.id, stars, run.ducats_total())
         if mission.number == 15:
+            chapter_1_ducats = _session.ducats
+            _check(chapter_1_ducats > int(saved["ducats"]), "%s: the ducats grew on the way" % file)
             await _check_select(2, file)
         elif mission.number == 25:
             await _check_select(3, file)
     for mission in missions:
         _check(_session.is_completed(mission.id), "%s: %s is completed" % [file, mission.id])
-    _check(_session.ducats > int(saved["ducats"]), "%s: the ducats grew on the way" % file)
+    _check(not _session.enter_chapter(1), "%s: the crew comes back to chapter 1" % file)
+    _check(_session.ducats == chapter_1_ducats, "%s: which kept its ducats" % file)
+    _check(_session.owned.has("streamers"), "%s: and what the crew bought in it" % file)
 
     var reloaded := FileAccess.get_file_as_string("%s/%s.json" % [_directory, VOYAGE_ID])
     var data: Dictionary = JSON.parse_string(reloaded)
     _check(data["missions"].size() == 35, "%s: the voyage saves all thirty-five missions" % file)
 
 
-## The mission select opens on the chapter of the newest open mission.
+## The mission select opens on the chapter of the newest open mission; a new
+## chapter tells the crew that it starts anew.
 func _check_select(chapter: int, file: String) -> void:
     var select: Node = load("res://scenes/mission_select/mission_select.tscn").instantiate()
     select.next_scene = ""
     root.add_child(select)
     await process_frame
+    await process_frame
     _check(select._chapter == chapter, "%s: the missions open on chapter %d" % [file, chapter])
+    if chapter > 1:
+        _check(
+            get_nodes_in_group(ConfirmDialog.GROUP).size() == 1,
+            "%s: chapter %d tells that the crew starts anew" % [file, chapter]
+        )
+        _check(
+            _session.chapter == chapter and _session.ducats == _session.STARTING_DUCATS,
+            "%s: chapter %d starts with %d ducats" % [file, chapter, _session.STARTING_DUCATS]
+        )
+        _check(_session.owned.is_empty(), "%s: and nothing bought" % file)
     var cards: int = select._grid.get_child_count()
     _check(
         cards == MissionCatalog.of_chapter(chapter).size(),

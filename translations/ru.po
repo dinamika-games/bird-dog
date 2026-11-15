@@ -924,6 +924,33 @@ msgstr "Плавания"
 msgid "Ivan's shipyard"
 msgstr "Верфь Ивана"
 
+#: scenes/mission_select/mission_select.gd scenes/shipyard/shipyard.gd
+#, fuzzy
+msgid "Alright"
+msgstr "Хорошо"
+
+#: scenes/mission_select/mission_select.gd
+#, fuzzy
+msgid "A new chapter begins!"
+msgstr "Начинается новая глава!"
+
+#: scenes/mission_select/mission_select.gd
+#, fuzzy
+msgid "Your ducats, ships and decorations go to the yataks and the people of the coast."
+msgstr "{crew|Твои|Твои|Ваши} дукаты, корабли и украшения достаются ятакам и людям побережья."
+
+#: scenes/mission_select/mission_select.gd
+#, fuzzy
+msgid "It is not right for haiduks to hoard wealth."
+msgstr "Не дело гайдукам копить богатства."
+
+#: scenes/mission_select/mission_select.gd
+#, fuzzy
+msgid "You set sail again with {ducats} {ducats|ducat|ducats} and a little gajeta."
+msgstr ""
+"{crew|Ты снова выходишь|Ты снова выходишь|Вы снова выходите} в море с {ducats} "
+"{ducats|дукатом|дукатами|дукатами} и маленькой гаетой."
+
 #: scenes/mission_select/mission_select.gd
 #, fuzzy
 msgid "Continue the mission where you left off?"
@@ -1261,11 +1288,6 @@ msgid "{name} costs {price} {price|ducat|ducats}, but you have only {ducats}."
 msgstr ""
 "За {name@acc} надо заплатить {price} {price|дукат|дуката|дукатов}, а у {crew|тебя|тебя|вас} только"
 " {ducats} {ducats|дукат|дуката|дукатов}."
-
-#: scenes/shipyard/shipyard.gd
-#, fuzzy
-msgid "Alright"
-msgstr "Хорошо"
 
 #: scenes/shipyard/shipyard.gd
 #, fuzzy

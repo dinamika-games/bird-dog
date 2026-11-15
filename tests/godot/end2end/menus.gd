@@ -236,8 +236,12 @@ func _act_instruction(screen: Node) -> void:
 
 func _act_missions(screen: Node) -> void:
     _check_unlocked(screen)
-    if not get_nodes_in_group(ConfirmDialog.GROUP).is_empty():
-        await _answer_continue(screen)
+    var dialogs := get_nodes_in_group(ConfirmDialog.GROUP)
+    if not dialogs.is_empty():
+        if dialogs[0].no_text == "":
+            await _answer_new_chapter(screen)
+        else:
+            await _answer_continue(screen)
         return
     if await _try_to_quit(screen):
         return
@@ -269,6 +273,40 @@ func _answer_continue(screen: Node) -> void:
         var text := tr("Yes, continue") if yes else tr("No, start anew")
         await _click(_button(screen, text), text)
     await _leaves(screen, "the answer whether to continue")
+
+
+## The dialog of a chapter which the crew enters for the first time: the crew
+## gave its wealth away and starts anew with the ducats of a new voyage, no
+## ship or decoration bought, and the gajeta for every captain.
+func _answer_new_chapter(screen: Node) -> void:
+    var session := _session()
+    var where := "%s, chapter %d" % [_phase, session.chapter]
+    _seen["%s a new chapter" % _phase] = true
+    _contracts.check_screen(screen, "%s new chapter" % _phase)
+    _check(session.chapter == screen._chapter, "%s: the chapter shown is entered" % where)
+    _check(session.ducats == session.STARTING_DUCATS, "%s: starts with the first ducats" % where)
+    _check(session.owned.is_empty(), "%s: starts with nothing bought" % where)
+    for captain in _crew().captains:
+        _check(
+            World.captain_ship(captain) == World.ships()[0],
+            "%s: %s sails the gajeta" % [where, captain.get("name", "")]
+        )
+        _check(
+            World.boat_decorations(captain).is_empty(),
+            "%s: the boat of %s has no decorations" % [where, captain.get("name", "")]
+        )
+    var roll := _rng.randf()
+    if roll < 0.2:
+        await _key(KEY_ENTER)
+    elif roll < 0.4:
+        await _key(KEY_ESCAPE)
+    else:
+        await _click(_button(screen, tr("Alright")), "Alright")
+    await _frames(2)
+    _check(
+        get_nodes_in_group(ConfirmDialog.GROUP).is_empty(),
+        "%s: the dialog of the new chapter closes" % where
+    )
 
 
 ## Take a detour from the mission select before the [param next] mission;

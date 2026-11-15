@@ -912,6 +912,31 @@ msgstr "Viajes"
 msgid "Ivan's shipyard"
 msgstr "Astillero de Ivan"
 
+#: scenes/mission_select/mission_select.gd scenes/shipyard/shipyard.gd
+#, fuzzy
+msgid "Alright"
+msgstr "Vale"
+
+#: scenes/mission_select/mission_select.gd
+#, fuzzy
+msgid "A new chapter begins!"
+msgstr "¡Empieza un nuevo capítulo!"
+
+#: scenes/mission_select/mission_select.gd
+#, fuzzy
+msgid "Your ducats, ships and decorations go to the yataks and the people of the coast."
+msgstr "Vuestros ducados, barcos y adornos van a los yataks y a la gente de la costa."
+
+#: scenes/mission_select/mission_select.gd
+#, fuzzy
+msgid "It is not right for haiduks to hoard wealth."
+msgstr "No está bien que los haiducos acumulen riquezas."
+
+#: scenes/mission_select/mission_select.gd
+#, fuzzy
+msgid "You set sail again with {ducats} {ducats|ducat|ducats} and a little gajeta."
+msgstr "Volvéis a zarpar con {ducats} {ducats|ducado|ducados} y una pequeña gajeta."
+
 #: scenes/mission_select/mission_select.gd
 #, fuzzy
 msgid "Continue the mission where you left off?"
@@ -1247,11 +1272,6 @@ msgstr "Amigo"
 #, fuzzy
 msgid "{name} costs {price} {price|ducat|ducats}, but you have only {ducats}."
 msgstr "{name}: {price} {price|ducado|ducados}, pero solo tenéis {ducats}."
-
-#: scenes/shipyard/shipyard.gd
-#, fuzzy
-msgid "Alright"
-msgstr "Vale"
 
 #: scenes/shipyard/shipyard.gd
 #, fuzzy

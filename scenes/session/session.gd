@@ -11,14 +11,26 @@ extends Node
 ## Which missions are unlocked is not stored: the first mission is always
 ## open, and every finished mission opens the next one. So the saves can never
 ## disagree with themselves.
+##
+## The possessions of the crew (the ducats, what it bought in Master Ivan's
+## shipyard and from the merchants, and the ship and the decorations which
+## every captain sails with) belong to a chapter: every chapter starts anew
+## with [constant STARTING_DUCATS] and the gajeta, since the haiduks give
+## their wealth away to the yataks and the people of the coast, and a chapter
+## played again keeps what the crew had in it (see [method enter_chapter]).
 
 ## The voyage was loaded from its save (e.g., after F6).
 signal loaded
 
 ## The format of the save files; bump it and convert the old files on load when
 ## the format changes (see [method upgrade]). Format 2 has no chest of the crew
-## any more: the ducats of a mission in progress are all on board.
-const FORMAT := 2
+## any more: the ducats of a mission in progress are all on board. Format 3
+## keeps the possessions by chapter.
+const FORMAT := 3
+
+## The directory, within the saves, of the copies of the saves as they were
+## before they were converted to the current format.
+const BACKUPS := "backups"
 
 ## The scene which F6 returns to after loading.
 const MISSION_SELECT := "res://scenes/mission_select/mission_select.tscn"
@@ -53,15 +65,25 @@ var missions := {}
 ## The mission which the crew chose last, for the mission screens.
 var current_mission := ""
 
-## The crew's ducats between the missions, carried over from mission to
-## mission. There is no chest at home: a mission takes them all on board (see
-## MissionRun.bring), where the corsairs and the patrols can take them, and
-## brings back what is left when it is finished.
+## The crew's ducats between the missions of the chapter, carried over from
+## mission to mission. There is no chest at home: a mission takes them all on
+## board (see MissionRun.bring), where the corsairs and the patrols can take
+## them, and brings back what is left when it is finished.
 var ducats := 0
 
-## The ids of the decorations which the crew bought in Master Ivan's
-## shipyard; what is bought stays bought.
+## The ids of the ships and the decorations which the crew bought in the
+## chapter; what is bought stays bought.
 var owned: Array[String] = []
+
+## The chapter whose possessions the crew holds now ([member ducats],
+## [member owned], and the ship and the decorations of every captain).
+var chapter := 1
+
+## The possessions of every chapter which the crew entered, by the number of
+## the chapter as a string: {"ducats", "owned", "boats"}, where "boats" holds
+## the "ship" and the decorations ("boat") of every captain. The one of the
+## current [member chapter] is brought up to date when the voyage is saved.
+var chapters := {}
 
 ## The mission in progress, as plain data (see the mission screen): the state
 ## of its run, the boats and the visited ports; {} for none.
@@ -149,11 +171,77 @@ func start(new_name: String) -> void:
     created = Time.get_datetime_string_from_system()
     missions = {}
     current_mission = ""
-    ducats = STARTING_DUCATS
-    owned.clear()
+    chapter = 1
+    chapters = {}
+    _start_chapter()
     hints_seen.clear()
     mission_in_progress = {}
     save()
+
+
+## Whether the crew entered the chapter already in this voyage, so that it
+## holds its possessions.
+func has_entered(number: int) -> bool:
+    return chapters.has(str(number))
+
+
+## Take the possessions of the chapter: those which the crew left in it, or,
+## the first time, the ducats of a new voyage and the gajeta, since the crew
+## gave everything else away. Return whether the crew entered the chapter for
+## the first time.
+func enter_chapter(number: int) -> bool:
+    if number == chapter and has_entered(number):
+        return false
+    _keep_chapter()
+    chapter = number
+    var first := not has_entered(number)
+    if first:
+        _start_chapter()
+    else:
+        _take_chapter(chapters[str(number)])
+    save()
+    return first
+
+
+## The possessions of a chapter which the crew enters for the first time.
+func _start_chapter() -> void:
+    ducats = STARTING_DUCATS
+    owned.clear()
+    for captain in _crew.captains:
+        captain.erase("ship")
+        captain.erase("boat")
+    _keep_chapter()
+
+
+## Keep the possessions which the crew holds as those of the current chapter.
+func _keep_chapter() -> void:
+    var boats: Array = []
+    for captain in _crew.captains:
+        var boat := {}
+        if captain.has("ship"):
+            boat["ship"] = captain["ship"]
+        if captain.has("boat"):
+            boat["boat"] = captain["boat"].duplicate(true)
+        boats.append(boat)
+    chapters[str(chapter)] = {"ducats": ducats, "owned": owned.duplicate(), "boats": boats}
+
+
+## Hold the possessions which the crew left in a chapter.
+func _take_chapter(record: Dictionary) -> void:
+    ducats = int(record.get("ducats", STARTING_DUCATS))
+    owned.clear()
+    for item_id in record.get("owned", []):
+        owned.append(str(item_id))
+    var boats: Array = record.get("boats", [])
+    for i in range(_crew.captains.size()):
+        var captain: Dictionary = _crew.captains[i]
+        captain.erase("ship")
+        captain.erase("boat")
+        var boat: Dictionary = boats[i] if i < boats.size() else {}
+        if boat.has("ship"):
+            captain["ship"] = str(boat["ship"])
+        if boat.has("boat"):
+            captain["boat"] = boat["boat"].duplicate(true)
 
 
 func _path(voyage_id: String) -> String:
@@ -161,6 +249,7 @@ func _path(voyage_id: String) -> String:
 
 
 func to_data() -> Dictionary:
+    _keep_chapter()
     return {
         "format": FORMAT,
         "id": id,
@@ -169,8 +258,8 @@ func to_data() -> Dictionary:
         "updated": Time.get_datetime_string_from_system(),
         "crew": _crew.to_data(),
         "missions": missions.duplicate(true),
-        "ducats": ducats,
-        "owned": owned.duplicate(),
+        "chapter": chapter,
+        "chapters": chapters.duplicate(true),
         "mission_in_progress": mission_in_progress.duplicate(true),
         "hints_seen": hints_seen.duplicate(),
     }
@@ -211,7 +300,22 @@ func read(voyage_id: String) -> Variant:
     var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
     if not data is Dictionary or int(data.get("format", 0)) > FORMAT:
         return null
-    return upgrade(data)
+    var format := int(data.get("format", 1))
+    var result := upgrade(data)
+    if format < FORMAT:
+        result["upgraded_from"] = format
+    return result
+
+
+## Copy the save of a voyage of an older format into [constant BACKUPS] before
+## it is saved in the current format (once: the first copy stays).
+func _back_up(voyage_id: String, format: int) -> void:
+    var directory := "%s/%s" % [saves_dir, BACKUPS]
+    var backup := "%s/%s.format%d.json" % [directory, voyage_id, format]
+    if FileAccess.file_exists(backup) or not FileAccess.file_exists(_path(voyage_id)):
+        return
+    DirAccess.make_dir_recursive_absolute(directory)
+    DirAccess.copy_absolute(_path(voyage_id), backup)
 
 
 ## Convert the save of an older format to the current one.
@@ -237,7 +341,57 @@ static func upgrade(data: Dictionary) -> Dictionary:
                 holds[i]["spent"] = 0
             run["brought"] = chest
         data["format"] = 2
+    if int(data.get("format", 2)) < 3:
+        # NOTE (mristin):
+        # Format 2 carried the possessions over from chapter to chapter. They
+        # stay with the chapter which the crew plays: that of the mission in
+        # progress, else that of the newest open mission. Every other chapter
+        # starts anew when the crew enters it.
+        var played := newest_chapter(data.get("missions", {}))
+        var progress := MissionCatalog.by_id(
+            str(data.get("mission_in_progress", {}).get("run", {}).get("mission", ""))
+        )
+        if progress != null:
+            played = progress.chapter
+        var boats: Array = []
+        for captain in data.get("crew", {}).get("captains", []):
+            var boat := {}
+            for key in ["ship", "boat"]:
+                if captain.has(key):
+                    boat[key] = captain[key]
+            boats.append(boat)
+        data["chapter"] = played
+        data["chapters"] = {
+            str(played):
+            {
+                "ducats": int(data.get("ducats", STARTING_DUCATS)),
+                "owned": data.get("owned", []),
+                "boats": boats,
+            }
+        }
+        data.erase("ducats")
+        data.erase("owned")
+        data["format"] = 3
     return data
+
+
+## The chapter of the newest open mission, given the state of the missions
+## (see [member missions]).
+static func newest_chapter(states: Dictionary) -> int:
+    var newest := 1
+    for mission in MissionCatalog.all():
+        var before := MissionCatalog.all().filter(
+            func(other: Mission) -> bool: return other.number == mission.number - 1
+        )
+        var open: bool = (
+            mission.number <= 1
+            or (
+                not before.is_empty() and bool(states.get(before[0].id, {}).get("completed", false))
+            )
+        )
+        if open:
+            newest = maxi(newest, mission.chapter)
+    return newest
 
 
 ## Load a voyage and its crew; return whether it worked.
@@ -249,17 +403,23 @@ func load_voyage(voyage_id: String) -> bool:
     voyage_name = data.get("name", voyage_id)
     created = data.get("created", "")
     missions = data.get("missions", {})
-    ducats = int(data.get("ducats", 0))
-    owned.clear()
-    for decoration_id in data.get("owned", []):
-        owned.append(str(decoration_id))
     mission_in_progress = data.get("mission_in_progress", {})
     hints_seen.clear()
     for hint in data.get("hints_seen", []):
         hints_seen.append(str(hint))
     current_mission = ""
     _crew.from_data(data.get("crew", {}))
-    _remember_last()
+    chapter = int(data.get("chapter", 1))
+    chapters = data.get("chapters", {})
+    if has_entered(chapter):
+        _take_chapter(chapters[str(chapter)])
+    else:
+        _start_chapter()
+    if data.has("upgraded_from"):
+        _back_up(voyage_id, int(data["upgraded_from"]))
+        save()
+    else:
+        _remember_last()
     loaded.emit()
     return true
 
@@ -327,6 +487,7 @@ func delete_voyage(voyage_id: String) -> void:
         id = ""
         voyage_name = ""
         missions = {}
+        chapters = {}
 
 
 func stars(mission_id: String) -> int:

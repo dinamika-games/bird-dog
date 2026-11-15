@@ -2,8 +2,8 @@ extends SceneTree
 ## Check that the texts fit their places, in English and in the drafts of every
 ## translation: the clue banner, the names of the ports on their plates, the
 ## merchant's cards, the decorations, the titles of the missions, the labels
-## of the HUD, and the screen at the end of every mission, whose text must
-## stay above its button. The scenes of the missions are checked in
+## of the HUD, the screen at the end of every mission, whose text must stay
+## above its button, and the dialog of a new chapter. The scenes of the missions are checked in
 ## test_dialogue_layout.gd. A text which only fits when it
 ## shrinks below a readable size, or which needs more lines than its box has,
 ## fails.
@@ -42,6 +42,7 @@ func _run() -> void:
         _check_missions()
         _check_world()
         _check_hud()
+        _check_new_chapter()
         await _check_ends()
         if translation != null:
             TranslationServer.remove_translation(translation)
@@ -76,6 +77,20 @@ func _shrinks(text: String, size: int, width: float, where: String) -> void:
 
 func _fits(text: String, size: int, width: float, where: String) -> void:
     _check(_width(text, size) <= width, "%s: '%s' is too wide" % [where, text])
+
+
+## The dialog of a chapter which the crew enters for the first time fits
+## above its buttons at a readable size (see ConfirmDialog.text_size_of).
+func _check_new_chapter() -> void:
+    var ducats: int = root.get_node("Session").STARTING_DUCATS
+    var text := MissionSelect.new_chapter_text(root, ducats)
+    var size := ConfirmDialog.text_size_of(text)
+    var width := ConfirmDialog.PANEL.size.x - 120
+    var height := _font.get_multiline_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, width, size).y
+    _check(
+        height <= ConfirmDialog.BUTTONS_TOP - ConfirmDialog.PANEL.position.y - 40.0,
+        "the dialog of a new chapter fits (size %d, %.0f px high)" % [size, height]
+    )
 
 
 # region Missions

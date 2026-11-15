@@ -2,18 +2,29 @@ class_name ConfirmDialog
 extends Control
 
 ## Ask the players a yes-or-no question before something which can not be
-## undone, e.g., deleting a voyage.
+## undone, e.g., deleting a voyage, or tell them something with one button
+## (see [method tell]).
 ##
 ## The dialog dims the screen and shows the question with two big buttons.
 ## While it is open, it is modal: the HandButtons behind it do not react, so
 ## that a hand which rests somewhere else presses nothing. Esc answers "no",
-## Enter "yes".
+## Enter "yes". A dialog which only tells has one button, which Esc and Enter
+## both press.
 
 ## The players answered "yes".
 signal confirmed
 
 ## The players answered "no" (or pressed Esc).
 signal cancelled
+
+## The panel of the dialog, and where the buttons start, in pixels.
+const PANEL := Rect2(260, 260, 1400, 560)
+const BUTTONS_TOP := 600.0
+
+## The largest and the smallest size of the text; a long text gets smaller
+## until it fits above the buttons.
+const TEXT_SIZE := 52
+const MIN_TEXT_SIZE := 30
 
 ## The group of the open dialogs; the HandButtons outside of them stay quiet.
 const GROUP := "modal_dialog"
@@ -38,6 +49,12 @@ static func ask(
     return dialog
 
 
+## Tell the players something on the menu screen, with one button which closes
+## the dialog (and emits [signal confirmed]).
+static func tell(screen: MenuScreen, text: String, ok: String) -> ConfirmDialog:
+    return ask(screen, text, ok, "")
+
+
 func _ready() -> void:
     set_anchors_preset(Control.PRESET_FULL_RECT)
     mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -50,7 +67,10 @@ func _ready() -> void:
     actions.size = Vector2(1920, 140)
     add_child(actions)
 
-    for entry in [[yes_text, _confirm], [no_text, _cancel]]:
+    var entries := [[yes_text, _confirm]]
+    if no_text != "":
+        entries.append([no_text, _cancel])
+    for entry in entries:
         var button := HandButton.new()
         button.custom_minimum_size = Vector2(440, 130)
         button.text = entry[0]
@@ -64,7 +84,10 @@ func _unhandled_input(event: InputEvent) -> void:
         return
     if event.keycode == KEY_ESCAPE:
         get_viewport().set_input_as_handled()
-        _cancel()
+        if no_text == "":
+            _confirm()
+        else:
+            _cancel()
     elif event.keycode in [KEY_ENTER, KEY_KP_ENTER]:
         get_viewport().set_input_as_handled()
         _confirm()
@@ -112,18 +135,44 @@ func _cancel() -> void:
 
 func _draw() -> void:
     draw_rect(Rect2(Vector2.ZERO, size), Color(0, 0, 0, 0.45))
-    var panel := Rect2(260, 260, 1400, 560)
+    var panel := PANEL
     draw_rect(Rect2(panel.position + Vector2(10, 12), panel.size), Color(0, 0, 0, 0.25))
     draw_rect(panel, Paper.PAPER)
     draw_rect(panel, Paper.INK, false, 4.0)
     draw_rect(panel.grow(-14), Color(Paper.INK, 0.4), false, 2.0)
+    var font := ThemeDB.fallback_font
+    var width := panel.size.x - 120
+    var text_size := text_size_of(question)
+    var height := (
+        font.get_multiline_string_size(question, HORIZONTAL_ALIGNMENT_CENTER, width, text_size).y
+    )
+    # NOTE (mristin):
+    # The text stands in the middle of the space above the buttons.
+    var top := panel.position.y + (BUTTONS_TOP - panel.position.y - height) * 0.5
     draw_multiline_string(
-        ThemeDB.fallback_font,
-        Vector2(panel.position.x + 60, 400),
+        font,
+        Vector2(panel.position.x + 60, top + font.get_ascent(text_size)),
         question,
         HORIZONTAL_ALIGNMENT_CENTER,
-        panel.size.x - 120,
-        52,
+        width,
+        text_size,
         -1,
         Paper.INK
     )
+
+
+## The size of the text at which it fits above the buttons (at least
+## [constant MIN_TEXT_SIZE]).
+static func text_size_of(text: String) -> int:
+    var font := ThemeDB.fallback_font
+    var width := PANEL.size.x - 120
+    var room := BUTTONS_TOP - PANEL.position.y - 40.0
+    var text_size := TEXT_SIZE
+    while text_size > MIN_TEXT_SIZE:
+        var height := (
+            font.get_multiline_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, width, text_size).y
+        )
+        if height <= room:
+            break
+        text_size -= 2
+    return text_size

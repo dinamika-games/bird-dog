@@ -923,6 +923,31 @@ msgstr "Reisen"
 msgid "Ivan's shipyard"
 msgstr "Ivans Werft"
 
+#: scenes/mission_select/mission_select.gd scenes/shipyard/shipyard.gd
+#, fuzzy
+msgid "Alright"
+msgstr "In Ordnung"
+
+#: scenes/mission_select/mission_select.gd
+#, fuzzy
+msgid "A new chapter begins!"
+msgstr "Ein neues Kapitel beginnt!"
+
+#: scenes/mission_select/mission_select.gd
+#, fuzzy
+msgid "Your ducats, ships and decorations go to the yataks and the people of the coast."
+msgstr "Eure Dukaten, Schiffe und Verzierungen gehen an die Jataken und die Leute der Küste."
+
+#: scenes/mission_select/mission_select.gd
+#, fuzzy
+msgid "It is not right for haiduks to hoard wealth."
+msgstr "Es ist nicht recht, dass Haiduken Reichtümer horten."
+
+#: scenes/mission_select/mission_select.gd
+#, fuzzy
+msgid "You set sail again with {ducats} {ducats|ducat|ducats} and a little gajeta."
+msgstr "Ihr stecht wieder mit {ducats} {ducats|Dukat|Dukaten} und einer kleinen Gajeta in See."
+
 #: scenes/mission_select/mission_select.gd
 #, fuzzy
 msgid "Continue the mission where you left off?"
@@ -1258,11 +1283,6 @@ msgstr "Freund"
 #, fuzzy
 msgid "{name} costs {price} {price|ducat|ducats}, but you have only {ducats}."
 msgstr "Für {name@acc} braucht ihr {price} {price|Dukat|Dukaten}, aber ihr habt nur {ducats}."
-
-#: scenes/shipyard/shipyard.gd
-#, fuzzy
-msgid "Alright"
-msgstr "In Ordnung"
 
 #: scenes/shipyard/shipyard.gd
 #, fuzzy

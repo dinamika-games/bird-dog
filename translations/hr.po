@@ -925,6 +925,33 @@ msgstr "Plovidbe"
 msgid "Ivan's shipyard"
 msgstr "Ivanov škver"
 
+#: scenes/mission_select/mission_select.gd scenes/shipyard/shipyard.gd
+#, fuzzy
+msgid "Alright"
+msgstr "Važi"
+
+#: scenes/mission_select/mission_select.gd
+#, fuzzy
+msgid "A new chapter begins!"
+msgstr "Počinje novo poglavlje!"
+
+#: scenes/mission_select/mission_select.gd
+#, fuzzy
+msgid "Your ducats, ships and decorations go to the yataks and the people of the coast."
+msgstr "{crew|Tvoji|Tvoji|Vaši|Vaši} dukati, brodovi i ukrasi idu jatacima i ljudima s obale."
+
+#: scenes/mission_select/mission_select.gd
+#, fuzzy
+msgid "It is not right for haiduks to hoard wealth."
+msgstr "Nije pravo da hajduci gomilaju blago."
+
+#: scenes/mission_select/mission_select.gd
+#, fuzzy
+msgid "You set sail again with {ducats} {ducats|ducat|ducats} and a little gajeta."
+msgstr ""
+"{crew|Ponovo isplovljavaš|Ponovo isplovljavaš|Ponovo isplovljavate} s {ducats} "
+"{ducats|dukatom|dukata|dukata} i malom gajetom."
+
 #: scenes/mission_select/mission_select.gd
 #, fuzzy
 msgid "Continue the mission where you left off?"
@@ -1264,11 +1291,6 @@ msgid "{name} costs {price} {price|ducat|ducats}, but you have only {ducats}."
 msgstr ""
 "Za {name@acc} triba platit {price} {price|dukat|dukata|dukata}, a {crew|imaš|imaš|imate|imate} "
 "samo {ducats} {ducats|dukat|dukata|dukata}."
-
-#: scenes/shipyard/shipyard.gd
-#, fuzzy
-msgid "Alright"
-msgstr "Važi"
 
 #: scenes/shipyard/shipyard.gd
 #, fuzzy

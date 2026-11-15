@@ -534,6 +534,7 @@ func _check_the_end() -> void:
             _check(
                 select._chapter_unlocked(chapter.number), "the chapter %d is open" % chapter.number
             )
+        _check(_seen.has("first a new chapter"), "the crew was told that a chapter starts anew")
         for language in _languages:
             _check(_languages_seen.has(language), "the voyage went through %s" % language)
     _check(_crew().players == players, "%d captain(s) sail in the voyage" % players)
@@ -567,6 +568,8 @@ func _restart() -> void:
     session.missions = {}
     session.ducats = 0
     session.owned.clear()
+    session.chapter = 1
+    session.chapters = {}
     session.mission_in_progress = {}
     _crew().start(1)
     # NOTE (mristin):
