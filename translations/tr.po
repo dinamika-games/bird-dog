@@ -791,10 +791,11 @@ msgstr "Görevi bitir (deneme)"
 msgid "This mission is still being built."
 msgstr "Bu görev daha yapım aşamasında."
 
+#. {mission} is the title of the mission
 #: scenes/mission/port_scene.gd
 #, fuzzy
-msgid "This is the wrong port, captain!"
-msgstr "Burası yanlış liman, {crew|kaptan|kaptan|kaptanlar}!"
+msgid "Regarding “{mission}”, this is the wrong port, captain!"
+msgstr "“{mission}” görevi için burası yanlış liman, {crew|kaptan|kaptan|kaptanlar}!"
 
 #: scenes/mission/port_scene.gd
 #, fuzzy
@@ -13481,6 +13482,10 @@ msgstr "kalyonu"
 msgctxt "acc"
 msgid "Galley"
 msgstr "kadırgayı"
+
+#, fuzzy
+#~ msgid "This is the wrong port, captain!"
+#~ msgstr "Burası yanlış liman, {crew|kaptan|kaptan|kaptanlar}!"
 
 #, fuzzy
 #~ msgid "The yataks, the haiduks' friends, send you {gift} {gift|ducat|ducats}."

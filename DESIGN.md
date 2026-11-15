@@ -171,7 +171,7 @@ The missions keep one numbering for the order in which they unlock (1 to 35); th
      * or **ducats**.
      You can also buy boosters ("What do you sell?", see section 10).
    * The clues you've collected so far stay in the crew's **logbook**, one button away.
-4. **Wrong port?** The local shrugs ("This is the wrong port, captain!", and where to sail), and you've lost the days of the voyage. Baba Stana's pigeon can bring one free hint per mission.
+4. **Wrong port?** The local shrugs ("Regarding “The Salt of Piran”, this is the wrong port, captain!", and where to sail), and you've lost the days of the voyage. Baba Stana's pigeon can bring one free hint per mission.
 5. After **4 to 6 ports, the finale**: in the last port, you pick the right person out of three, using the traits you collected, or you deliver the items to the right person.
 6. **The stars** (1 to 3), for the days left on the mission clock and the wrong ports. There is also a fun fact about a place you visited. There are no exercise statistics.
 
@@ -1034,7 +1034,7 @@ All the building blocks are custom Godot `Resource` classes (`class_name … ext
 
 Steps are kept generic, and a new mission usually needs no new code. When it does, the new behaviour becomes a new reusable step (or a new effect, below), never a special case inside the runner.
 
-**Conversations** are trees of `DialogueNode`s: a speaker, a line, and up to three `Answer`s. Each answer has a label and a list of **effects**, small typed blocks such as `GiveClue`, `RevealTrait`, `GiveItem`, `TakeItem`, `GiveDucats`, `AskRiddle`, `OpenShop`, `CompleteStep` and `Goodbye`. Most conversations are not written by hand: each step builds them from templates. For example, a `Trail` creates the "right port" conversation (a greeting, "Have you seen…?", the destination clue from the next port's fact, perhaps a trait or a riddle) and the "wrong port" conversation ("This is the wrong port, captain!", and where to sail). Hand-written conversations are only for the special moments of a story.
+**Conversations** are trees of `DialogueNode`s: a speaker, a line, and up to three `Answer`s. Each answer has a label and a list of **effects**, small typed blocks such as `GiveClue`, `RevealTrait`, `GiveItem`, `TakeItem`, `GiveDucats`, `AskRiddle`, `OpenShop`, `CompleteStep` and `Goodbye`. Most conversations are not written by hand: each step builds them from templates. For example, a `Trail` creates the "right port" conversation (a greeting, "Have you seen…?", the destination clue from the next port's fact, perhaps a trait or a riddle) and the "wrong port" conversation ("Regarding “The Salt of Piran”, this is the wrong port, captain!", and where to sail). Hand-written conversations are only for the special moments of a story.
 
 **Clues are assembled, not written per mission:** a `ClueTemplate` ("He asked the way to {fact}.", "She bought a ticket to {fact}.") plus a `PortFact` gives the line. A mission chooses which templates and which kinds of facts it uses. That way, a new port immediately works in every mission, and the texts are translated once.
 
@@ -1122,7 +1122,7 @@ All the classes are GDScript `Resource`s with `class_name`, in `scenes/missions/
 | `Item` | `id`, `name`, `picture`, `price` (default) | The bell, a load of salt, the ledger, a sail, honey, the medicine. |
 | `Riddle` | `question`, `answers: Array[String]`, `correct: int`, `ducats` | Asked by a local; a wrong answer costs nothing. |
 | `Offer` | `booster` (id), `price` | What a port's merchant sells (section 10). |
-| `ClueTemplateSet` | `kind` (destination, trait, wrong port, greeting, goodbye), `templates: Array[String]` | "He asked the way to {fact}.", "She had {trait}.", "This is the wrong port, captain!" |
+| `ClueTemplateSet` | `kind` (destination, trait, wrong port, greeting, goodbye), `templates: Array[String]` | "He asked the way to {fact}.", "She had {trait}.", "Regarding “{mission}”, this is the wrong port, captain!" |
 | `SeaConditions` | `winds: Array[WindChance]`, `change_seconds: Vector2` (min, max), `clouds: Vector2i` (min, max), `corsairs: Array[Zone]`, `patrols: Array[Zone]`, `patrol_powers: Array[String]` (whose waters the patrols keep: Venice, and in chapter 3 the Habsburgs, too), `barrels: int`, `speed_scale: float` | Each mission picks one (or overrides it). |
 | `WindChance` | `name` (bura, jugo, maestral, ...), `direction` (degrees), `intensities: Vector3` (the weights of light, fresh, strong), `weight` | The winds of a region and how often they blow. |
 | `Zone` | `center: Vector2` (longitude, latitude), `radius_km` | Where the corsairs or the patrols cruise. |

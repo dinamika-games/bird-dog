@@ -794,10 +794,11 @@ msgstr "Terminer la mission (test)"
 msgid "This mission is still being built."
 msgstr "Cette mission est encore en construction."
 
+#. {mission} is the title of the mission
 #: scenes/mission/port_scene.gd
 #, fuzzy
-msgid "This is the wrong port, captain!"
-msgstr "Ce n'est pas le bon port, {crew|capitaine|capitaine|capitaines} !"
+msgid "Regarding “{mission}”, this is the wrong port, captain!"
+msgstr "Concernant « {mission} », ce n'est pas le bon port, {crew|capitaine|capitaine|capitaines} !"
 
 #: scenes/mission/port_scene.gd
 #, fuzzy
@@ -13575,6 +13576,10 @@ msgstr "le galion"
 msgctxt "acc"
 msgid "Galley"
 msgstr "la galère"
+
+#, fuzzy
+#~ msgid "This is the wrong port, captain!"
+#~ msgstr "Ce n'est pas le bon port, {crew|capitaine|capitaine|capitaines} !"
 
 #, fuzzy
 #~ msgid "The yataks, the haiduks' friends, send you {gift} {gift|ducat|ducats}."

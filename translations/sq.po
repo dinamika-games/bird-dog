@@ -788,10 +788,13 @@ msgstr "Përfundo misionin (test)"
 msgid "This mission is still being built."
 msgstr "Ky mision është ende në ndërtim."
 
+#. {mission} is the title of the mission
 #: scenes/mission/port_scene.gd
 #, fuzzy
-msgid "This is the wrong port, captain!"
-msgstr "Ky është porti i gabuar, {crew|kapiten|kapitene|kapitenë|kapitene}!"
+msgid "Regarding “{mission}”, this is the wrong port, captain!"
+msgstr ""
+"Sa i përket misionit “{mission}”, ky është porti i gabuar, "
+"{crew|kapiten|kapitene|kapitenë|kapitene}!"
 
 #: scenes/mission/port_scene.gd
 #, fuzzy
@@ -13520,6 +13523,10 @@ msgstr "galeonin"
 msgctxt "acc"
 msgid "Galley"
 msgstr "galerën"
+
+#, fuzzy
+#~ msgid "This is the wrong port, captain!"
+#~ msgstr "Ky është porti i gabuar, {crew|kapiten|kapitene|kapitenë|kapitene}!"
 
 #, fuzzy
 #~ msgid "The yataks, the haiduks' friends, send you {gift} {gift|ducat|ducats}."

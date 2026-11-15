@@ -629,8 +629,9 @@ msgstr ""
 msgid "This mission is still being built."
 msgstr ""
 
+#. {mission} is the title of the mission
 #: scenes/mission/port_scene.gd
-msgid "This is the wrong port, captain!"
+msgid "Regarding “{mission}”, this is the wrong port, captain!"
 msgstr ""
 
 #: scenes/mission/port_scene.gd

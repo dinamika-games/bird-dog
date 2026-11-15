@@ -16,7 +16,14 @@ static func of(run: MissionRun, port: Port, players: int) -> Dictionary:
     if scene != null:
         return scene
     var local: Person = port.locals[0] if not port.locals.is_empty() else null
-    var said: Array = [MissionRun.line("This is the wrong port, captain!"), run.clue]
+    # NOTE (mristin):
+    # The line may follow the thanks for an errand, so it names what the port is
+    # wrong for.
+    # TRANSLATORS: {mission} is the title of the mission
+    var wrong := MissionRun.line(
+        "Regarding “{mission}”, this is the wrong port, captain!", {"mission": run.mission.title}
+    )
+    var said: Array = [wrong, run.clue]
     var wanted := step.wanted_item(run, port)
     if wanted != null and players > 1:
         said = [

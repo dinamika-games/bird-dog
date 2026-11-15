@@ -800,10 +800,12 @@ msgstr "Završi misiju (test)"
 msgid "This mission is still being built."
 msgstr "Ova misija se još gradi."
 
+#. {mission} is the title of the mission
 #: scenes/mission/port_scene.gd
 #, fuzzy
-msgid "This is the wrong port, captain!"
-msgstr "Ovo je krivi port, {crew|kapetane|kapetanice|kapetani|kapetanice}!"
+msgid "Regarding “{mission}”, this is the wrong port, captain!"
+msgstr ""
+"Što se tiče misije „{mission}”, ovo je krivi port, {crew|kapetane|kapetanice|kapetani|kapetanice}!"
 
 #: scenes/mission/port_scene.gd
 #, fuzzy
@@ -13666,6 +13668,10 @@ msgstr "galeon"
 msgctxt "acc"
 msgid "Galley"
 msgstr "galiju"
+
+#, fuzzy
+#~ msgid "This is the wrong port, captain!"
+#~ msgstr "Ovo je krivi port, {crew|kapetane|kapetanice|kapetani|kapetanice}!"
 
 #, fuzzy
 #~ msgid "The yataks, the haiduks' friends, send you {gift} {gift|ducat|ducats}."

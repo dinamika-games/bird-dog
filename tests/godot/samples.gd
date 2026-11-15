@@ -76,7 +76,13 @@ static func scenes(mission: Mission) -> Array[Dictionary]:
                 continue
             var wrong := MissionStep.talk(
                 null,
-                [MissionRun.line("This is the wrong port, captain!"), run.clue],
+                [
+                    MissionRun.line(
+                        "Regarding “{mission}”, this is the wrong port, captain!",
+                        {"mission": mission.title}
+                    ),
+                    run.clue
+                ],
                 MissionRun.line("Goodbye!")
             )
             PortScene.add_buttons(wrong, port, run)
