@@ -7,7 +7,7 @@ The hand and head tracking (`scenes/hand_tracker/`) and the fist classifier were
 
 The game includes, or is built with, the following third-party components.
 Each keeps its own license.
-The release packages carry all the license texts in the directory `licenses/`; the Windows package also the license text of CameraServerExtension.
+The release packages carry all the license texts in the directory `licenses/` (those of the models in `licenses/models/`); the Windows package also the license text of CameraServerExtension.
 
 ## Distributed with the game
 

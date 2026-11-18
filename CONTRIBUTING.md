@@ -123,7 +123,9 @@ Start the game with `-- --no-music` to switch the music off; M mutes it while pl
 
 ## Packaging
 
-The export presets (`export_presets.cfg`) package the game for Linux, Windows and macOS into `build/`. You need the export templates of Godot 4.6.2 (.NET) (in the editor: Editor, Manage Export Templates), then:
+The workflow `.github/workflows/publish.yaml` packages the game for Linux, Windows and macOS when a release is published on GitHub, and attaches the packages to the release (`bird-dog-<version>-<platform>.zip`, for the tag `v<version>`). You can also start it by hand on the Actions tab to try out the packaging; the packages are then the artifacts of the run. The workflow `.github/workflows/ci.yaml` runs `dev/continuous_integration/precommit.py` on every pull request and on every push to `main`.
+
+To package by hand, the export presets (`export_presets.cfg`) package the game for Linux, Windows and macOS into `build/`. You need the export templates of Godot 4.6.2 (.NET) (in the editor: Editor, Manage Export Templates), then:
 
 ```
 mkdir -p build/linux build/windows build/macos
@@ -141,9 +143,12 @@ cp addons/CameraServerExtension/LICENSE build/windows/licenses/camera-server-ext
 
 ORT=$(dotnet nuget locals global-packages -l | cut -d' ' -f2)microsoft.ml.onnxruntime/1.19.2
 for p in linux windows macos; do
-  mkdir -p build/$p/licenses/onnxruntime
+  mkdir -p build/$p/licenses/onnxruntime build/$p/licenses/models
   cp -r licenses/godot build/$p/licenses/
   cp $ORT/LICENSE $ORT/ThirdPartyNotices.txt build/$p/licenses/onnxruntime/
+  cp scenes/hand_tracker/yolox/model/LICENSE build/$p/licenses/models/yolox-LICENSE
+  cp scenes/hand_tracker/yunet/model/LICENSE build/$p/licenses/models/yunet-LICENSE
+  cp scenes/hand_tracker/gesture/model/LICENSE.md build/$p/licenses/models/rock-paper-scissors-LICENSE.md
   cp LICENSE THIRD_PARTY_NOTICES.md build/$p/
 done
 ```
