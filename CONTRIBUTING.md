@@ -1,0 +1,217 @@
+# Contributing
+
+## Overview
+
+The game is made with [Godot] 4.6 (.NET), in GDScript and C#, like [Splash 'n' Splat], from which we took over the hand and head tracking.
+
+* **The vision is in C#** (`scenes/hand_tracker/`), taken over from Splash 'n' Splat: `YoloxHandDetector` finds the hands and the heads in one run, `MultiHandTracker` follows the hands, `FistClassifier` and `GestureStateMachine` recognize the fists, and `HandVisionService` (a Godot node) runs it all on a background thread.
+  See the contributing guide of Splash 'n' Splat for the details and for how the models were obtained.
+* **The bird-dog poses** (`scenes/pose/`):
+  * `core/BirdDogPose.cs` (no Godot dependency) splits the picture between the players (`PlayerSplit`), recognizes the pose of each player as `Rest`, `Left`, `Right`, `Invalid` or `Absent`, debounces it, and steers by the height of the raised hand (`Steer` in [-1, 1]) (`BirdDogPoseClassifier`, `BirdDogPoseTracker`).
+    All the thresholds are in head heights (`PoseConfig`).
+  * `pose_service/PoseService.cs` (a Godot node) runs the recognition on every new snapshot of the vision, offers `GetPlayers()` to GDScript, and records the detections on request.
+* **The language select** (`scenes/language_select/`, the first screen) lets the players choose the language (English, then the others alphabetically: German, Spanish, French, Croatian, Italian, Portuguese, Russian, Albanian and Turkish), with the hand cursor (`scenes/hand_cursor/`: point with an open hand, hold a fist for 1.5 s to click). The choice is saved in `user://settings.cfg` by the `Languages` autoload.
+* **The player count and the captain creator** (`scenes/player_count/`, `scenes/captain_creator/`) come next; the `Crew` autoload (`scenes/crew/`) keeps the players and the looks of their captains (`CaptainOptions`). Try it in isolation with its test screens (below).
+* **The menus** (the dialogues) extend `MenuScreen` (`scenes/menu/`), which brings the paper, the `HandCursor` on top, Esc to quit and `go_next()` to the `next_scene`. The screens build themselves from `HandButton`s (point, hold a fist, with the golden charge; optionally octagons), so the point-and-click is written once.
+* **The voyages** (`scenes/session_select/`, `scenes/session_name/`) come right after the language; the `Session` autoload (`scenes/session/`) saves a voyage with its crew and its missions to `user://saves/` (F5 saves, F6 loads). The missions are described in `data/missions/<nn>_<id>/mission.tres` (`Mission`, loaded by `MissionCatalog`) from the building blocks of `scenes/missions/` and the world of `data/world/`, and the mission select (`scenes/mission_select/`) unlocks them one after the other.
+* **A mission** (`scenes/mission/`) sails the chart (`sailing/`), shows the HUD (`hud/`: the days, the clue, the wind, the wheel and the minimap) and the port scenes (`StoryCard`), while `MissionRun` (`scenes/missions/`) follows the steps. Without a camera, A/D or the arrow keys steer. `tests/godot/test_missions.gd` checks the world and plays mission 1 headless.
+* **The vision** runs for the whole game in the `Vision` autoload (`scenes/vision/`), so that the camera starts only once.
+* **The instruction** (`scenes/instruction/`, after the language select) shows how to do the bird dog and how it steers, with a 3D captain built from shapes in code (`Captain3D`, posed by `BirdDogPoses`).
+* **The wheel** (`scenes/wheel/ship_wheel.gd`) draws the ship's wheel of wood and brass on any canvas.
+* **The test screens** (`scenes/tests/`) show every part of the game in isolation; see below.
+
+[Godot]: https://godotengine.org
+[Splash 'n' Splat]: https://github.com/mristin/splash-n-splat
+
+## Setting up
+
+You need [Git LFS] (the ONNX models and the test images are in LFS), the .NET 8 SDK, the **.NET** build of Godot 4.6.2, Python 3.10+ and a webcam which supports 640x480.
+
+```
+export GODOT=~/apps/Godot_v4.6.2-stable_mono_linux_x86_64/Godot_v4.6.2-stable_mono_linux.x86_64
+python3 -m venv venv && touch venv/.gdignore
+venv/bin/pip install -r dev/requirements.txt
+dotnet build BirdDog.sln
+$GODOT --path .
+```
+
+[Git LFS]: https://git-lfs.com
+
+## The test screens
+
+Every screen of the game can be tried in isolation, without going through the screens before it. The test menu lists them all and starts each in a window of its own (Esc there comes back to the menu):
+
+```
+$GODOT --path . scenes/tests/test_menu/test_menu.tscn
+```
+
+The test screens are small scenes in `scenes/tests/`, which instance the real scene with the settings of the test (e.g., `next_scene = ""`, so that a menu starts over instead of going on, or `first_part = 2` and `only_one_part = true` for the second part of the instruction). Add a test screen for every new screen, and list it in `scenes/tests/test_menu/test_menu.gd`. The pre-commit checks start every test screen headless (`smoke-scenes`).
+
+`$GODOT --path .` starts the whole game from the language select. The options for every start: `--lang=<code>`, `--no-camera` (A/D and the arrow keys steer then) and `--no-music`.
+
+In the instruction, Space skips it, Esc quits.
+
+To look at the animation frame by frame without showing the webcam, render it to PNGs with Godot's movie maker:
+
+```
+$GODOT --path . scenes/tests/intro_test/intro_bird_dog_test.tscn --windowed --resolution 960x540 --fixed-fps 2 --write-movie /tmp/instruction/f.png --quit-after 130 -- --no-camera
+```
+
+## The pose test
+
+The pose test checks that the camera set-up works (DESIGN.md, "The pose test"):
+
+```
+$GODOT --path . scenes/tests/pose_test/pose_test.tscn -- [--record[=DIR]] [--no-thumbnails] [--distance=2.0] [--note=TEXT]
+```
+
+* Put the laptop on a table or a chair, 1.5 to 2.5 m from the player, a bit higher than the player's back.
+* The screen shows the mirrored camera, the head (yellow), the head line (dashed), the hands (green when raised, grey when down), the wheel pinned to the head, and the recognized pose. The higher the raised hand is above the head line, the harder the wheel turns (full at 1.5 head heights above the line).
+* The keys:
+  * **1** or **2**: one or two players (the picture is split in the middle),
+  * **Up** and **Down**: move the head line (by default low, 5% above the bottom of the face, at the chin),
+  * **P**: start or stop the recording protocol (rest, 5 left holds, 5 right holds, alternate, slowly raise each arm higher and higher, kneel up and wave, closer and farther; about 3 minutes),
+  * **S**: save the tuned settings to `user://pose.json`, which the game loads at start,
+  * **Esc**: quit.
+* **Recording** happens only with `--record`. The detections (the boxes, the poses and the protocol step) go to `detections.jsonl`, and a small thumbnail (160x120) every 2 s, unless `--no-thumbnails`. The default directory is `user://pose_recordings/<session>/`, e.g., `~/.local/share/godot/app_userdata/Bird Dog/pose_recordings/` on Linux, outside of the repository.
+  Record children only with their and their parents' consent, and do not commit the thumbnails.
+
+Run the protocol at 1.5 m, 2 m and 2.5 m (pass `--distance=`), and once with two children side by side (`pose_test_two_players.tscn`).
+
+## Translations
+
+The game is written in English and translated to Russian (`ru`), Croatian in the Dalmatian ikavian dialect (`hr`), German (`de`), Spanish (`es`), French (`fr`), Italian (`it`), Portuguese (`pt`), Albanian (`sq`) and Turkish (`tr`); see DESIGN.md, "Translations from the start".
+
+* **In the code,** every text a player sees goes through `tr("...")` with the whole sentence and named placeholders (`tr("Ahoy, {captain}!").format({"captain": name})`). Never glue a sentence together from pieces. A comment `# TRANSLATORS: ...` right above the call reaches the translators, e.g., `# TRANSLATORS: caption, at most 80 characters` (the check enforces the limit).
+* **Collect the messages** after changing texts:
+
+  ```
+  venv/bin/python dev/translations/extract.py
+  ```
+
+  This updates `translations/messages.pot` and merges it into every `translations/<code>.po`, keeping the existing translations.
+* **Cases and numbers:** a translation may ask for a declined form of an inserted name, e.g., `Jidrite {port@to}!` gives "Jidrite u Pulu!" (the form of "Pula" with the context `to` in the same `.po` file), and a noun may agree with a number, e.g., `{ducats} {ducats|дукат|дуката|дукатов}`. The forms of the ports (`to`, `in`), the facts (`to`, `about`), the items, the hallmarks and the decorations (`acc`) are their own messages with that context; see `scenes/languages/grammar.gd`.
+* **The captain's gender:** where a word depends on the addressed captains, write the forms in the translation: `{crew|Kapitän|Kapitänin|Kapitäne|Kapitäninnen}` (one haiduk, one haidukess, several captains, several haidukesses; the last two may be left out). The game picks the form for the captains in play.
+* **Translate** the `.po` files with any PO editor (e.g., Poedit) or a text editor. A new translation stays marked as *fuzzy* until a native speaker has reviewed it in the game; the game shows it anyway (see `scenes/languages/languages.gd`).
+* **Review in the game:** the game always shows the whole translation, the messages marked as *fuzzy* included (the mark only tells the translators what is not reviewed yet). Start with the language, then remove the fuzzy mark of the messages which read well:
+
+  ```
+  $GODOT --path . -- --lang=ru
+  $GODOT --path . -- --lang=hr
+  $GODOT --path . -- --lang=de   # or es, fr, it, pt, sq, tr
+  ```
+
+* **Add a language** with one entry in `translations/languages.json` (the code, e.g., `nl`, its name in itself, an optional second line, "Choose your language" in itself and its alphabet for the name keyboard; keep English first and the rest sorted by the code), then run `extract.py`, which creates `translations/nl.po`; set its `Plural-Forms` header, and add its plural rule to `Grammar.plural_index` if it is not "one and other" (as French and Russian). The game and the language select pick it up from the list.
+* **Check** the coverage and the placeholders (`--verbose` lists the open messages):
+
+  ```
+  venv/bin/python dev/translations/check.py --verbose
+  ```
+
+The pre-commit checks run both scripts: they fail if the translation files are out of date or a translation breaks a placeholder.
+
+## Music
+
+The music is rendered from public-domain MIDI files (see DESIGN.md, "Music"). The rendered `.ogg` files are in the repository (in Git LFS), so you only need this when you change the list of pieces in `dev/assets/fetch_music.py`:
+
+```
+sudo apt install timidity fluid-soundfont-gm ffmpeg
+venv/bin/python dev/assets/fetch_music.py
+```
+
+Start the game with `-- --no-music` to switch the music off; M mutes it while playing.
+
+## Packaging
+
+The export presets (`export_presets.cfg`) package the game for Linux, Windows and macOS into `build/`. You need the export templates of Godot 4.6.2 (.NET) (in the editor: Editor, Manage Export Templates), then:
+
+```
+mkdir -p build/linux build/windows build/macos
+touch build/.gdignore
+dotnet build BirdDog.sln -c Release
+$GODOT --headless --path . --export-release "Linux" build/linux/bird-dog.x86_64
+$GODOT --headless --path . --export-release "Windows" build/windows/bird-dog.exe
+$GODOT --headless --path . --export-release "macOS" build/macos/bird-dog.zip
+
+cp addons/CameraServerExtension/CameraServerExtension.gdextension \
+  addons/CameraServerExtension/libcameraserver-extension.windows.dll \
+  build/windows/
+mkdir -p build/windows/licenses/camera-server-extension
+cp addons/CameraServerExtension/LICENSE build/windows/licenses/camera-server-extension/
+
+ORT=$(dotnet nuget locals global-packages -l | cut -d' ' -f2)microsoft.ml.onnxruntime/1.19.2
+for p in linux windows macos; do
+  mkdir -p build/$p/licenses/onnxruntime
+  cp -r licenses/godot build/$p/licenses/
+  cp $ORT/LICENSE $ORT/ThirdPartyNotices.txt build/$p/licenses/onnxruntime/
+  cp LICENSE THIRD_PARTY_NOTICES.md build/$p/
+done
+```
+
+The version of the game is `config/version` in `project.godot` (e.g., `1.0.0`). macOS accepts only numbers in the versions of the app bundle, so `application/short_version` and `application/version` of the macOS preset carry the version without a suffix such as `-rc1` (e.g., `1.0.0` for `1.0.0-rc1`).
+
+Ship the whole folder (the executable, the `.pck` and the `data_BirdDog_*` folder with the .NET runtime and ONNX Runtime), together with `LICENSE`, `THIRD_PARTY_NOTICES.md` and `licenses/`.
+The `.gdignore` in `build/` hides the packages from Godot, which would otherwise try to load the camera extension of the Windows package (see below), and fail, on the other platforms.
+
+Mind the limits of the platforms:
+
+* **Windows:** Godot 4.6 implements no camera on Windows, so we use [CameraServerExtension] there, and only there, from `addons/CameraServerExtension/` (the prebuilt Windows x86_64 library of its release 2026.03.27, as in [Steppe Rescue]).
+  Godot reports an error on every platform which an extension lists no library for, so the directory is hidden from Godot (`.gdignore`); `HandVisionService` loads the extension itself on Windows (`StartCameraExtension`), from the directory of the executable, or from the project in the editor.
+  Hence the packaging copies `CameraServerExtension.gdextension` and `libcameraserver-extension.windows.dll` next to the executable (see above).
+  The formats of the extension's feeds are reached by name (the methods of `CameraFeed` do not reach them), and Windows calls YUYV "YUY2".
+  Without the extension, or if Windows denies the camera, the game tells so, and the players steer with A/D or the arrow keys.
+  Drop the extension once Godot supports the camera on Windows itself ([godotengine/godot#108538]).
+* **macOS:** The app is universal and runs on the Intel and the Apple Silicon Macs. We stay with ONNX Runtime 1.19, the last version whose libraries for macOS run on macOS 11 (from 1.20 on, they need macOS 13.3, and from 1.24 on, there is none for the Intel Macs). On a macOS older than 11, the game reports that the hand tracking failed, and the keys still steer. The app is signed ad hoc and not notarized, so the players open it the first time with a right click and Open. The camera on macOS lists no formats and delivers its frames as two planes (Y and CbCr), which `HandVisionService` converts to RGB itself (`YcbcrConverter`). On the first start, macOS asks for the permission to use the camera; the vision tries again every few seconds to start the camera until the players allow it.
+
+[CameraServerExtension]: https://github.com/j20001970/godot-cameraserver-extension
+[Steppe Rescue]: https://github.com/mristin/steppe-rescue
+[godotengine/godot#108538]: https://github.com/godotengine/godot/pull/108538
+
+## Checks before a pull request
+
+```
+venv/bin/python dev/continuous_integration/precommit.py --overwrite
+```
+
+This re-formats the code, lints it, checks the translations, runs the .NET tests and the Godot tests (`tests/godot/`), starts every test screen (`tests/BirdDog.Tests/`), builds the game, imports the project and type-checks the scripts.
+
+**The end-to-end tests** in `tests/godot/end2end/` play the whole game, from the language select through every mission of every chapter to the end of the voyage, and once more after a restart, as players do: `test_one_player.gd` with one captain, and `test_two_players.gd` with two on the split screen.
+They click the buttons with the mouse (and now and then press the keys) and sail only with the keys (`captain_bot.gd`, finding the way with `navigator.gd`): they answer the people in the ports, pick in the line-ups (now and then the wrong one), shop, run errands, hand over goods when the boats meet, and take detours (how to steer, the shipyard, the other chapters, leaving a mission and continuing it, the chart, Esc).
+The voyage starts the game again in another language every few missions, so that it goes through every language.
+At the end, every mission must be completed, the last must end the voyage, and after a restart the language and the voyage must come back from the disk; the players then start a new voyage and go back to the first.
+All the way, they check the contracts of the game (`contracts.gd`), which run only in the tests: e.g., no two buttons overlap, no text runs out of its button or off the screen, the scenes of the ports keep the rules of `story_layout.gd` (which `test_dialogue_layout.gd` checks for every scene in every language, too), the boats never sail on the land, the days never run backwards, the chart points where the mission says, and a mission is done exactly when its end shows.
+Since the voyage sees each screen in only a few languages, `tests/godot/test_menu_layout.gd` checks the same contracts on every menu screen in every language, with every choice of the captains and every tab of the shipyard.
+The random choices come from a seed, so that a failure repeats; try others with `-- --seed=<n>`, or play only the first missions with `-- --missions=<n>`.
+The game runs twelve times faster than the fixed frame rate gives, and the boats sail three more steps on every frame (`-- --time-scale=<x>`, `-- --substeps=<n>`).
+The tests keep their voyages and settings in `user://tests/`, and leave the player's alone.
+
+```
+$GODOT --headless --fixed-fps 60 --path . --script tests/godot/end2end/test_one_player.gd -- --no-camera --no-music --seed=7
+```
+
+**The render tests** (`tests/render/`) look at the pictures the game renders, so they need a window (the pre-commit checks run them as `render-test` if there is a display, and skip them otherwise, e.g., on the continuous integration):
+
+* `test_edge_of_the_world.gd` puts a boat at the edge of the chart, all along it and in the corners, with one and with two captains, and checks that everything beyond the edge is black (the frame of `ChartView` covers the coasts cut by the edge and the clouds which drift beyond it).
+* `test_decorations_show.gd` puts every decoration (from the shipyard and from the merchants) on every ship, at sea, on the mission select and in the shipyard, and checks that the boat with it is not pixel identical to the boat without it, and that no two decorations of the same place look alike.
+
+```
+$GODOT --path . --windowed --script tests/render/test_edge_of_the_world.gd -- --no-camera --no-music --shots=/tmp/shots
+```
+
+`tests/godot/test_edge_sliding.gd` sails boats along the edge, into it and along the land where it meets the edge, and checks that no step ever crosses the land (see `ChartView.crosses_land`).
+
+**The soak test** (`tests/soak/`) is too long for every commit: run it now and then, e.g., before a release. Every mission sails for minutes of game time with one and with two players, with wandering steering, and the test checks that no boat gets stuck, that the hazards do not pile up and that the objects in memory do not keep growing:
+
+```
+$GODOT --headless --path . -s tests/soak/soak_missions.gd -- --no-camera --no-music
+```
+
+**The soak test of the towing** tows boats from many random points at sea to the nearest port and checks that neither the towed boat nor the fishing boat goes onto the land, and that every tow ends with the fishing boat in the port. It prints its random seed, so that a failure can be repeated with `--seed=N`; `--towings=N` sets how many, and `--snapshots=DIR` saves pictures of the first four (run it in a window then, without `--headless`):
+
+```
+$GODOT --headless --path . -s tests/soak/soak_towing.gd -- --no-camera --no-music
+```
+
+### Commit messages
+
+We follow Chris Beams' [guidelines on commit messages](https://chris.beams.io/posts/git-commit/).
