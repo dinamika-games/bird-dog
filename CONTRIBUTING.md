@@ -138,7 +138,17 @@ cp addons/CameraServerExtension/CameraServerExtension.gdextension \
   build/windows/
 mkdir -p build/windows/licenses/camera-server-extension
 cp addons/CameraServerExtension/LICENSE build/windows/licenses/camera-server-extension/
+
+ORT=$(dotnet nuget locals global-packages -l | cut -d' ' -f2)microsoft.ml.onnxruntime/1.19.2
+for p in linux windows macos; do
+  mkdir -p build/$p/licenses/onnxruntime
+  cp -r licenses/godot build/$p/licenses/
+  cp $ORT/LICENSE $ORT/ThirdPartyNotices.txt build/$p/licenses/onnxruntime/
+  cp LICENSE THIRD_PARTY_NOTICES.md build/$p/
+done
 ```
+
+The version of the game is `config/version` in `project.godot` (e.g., `1.0.0-rc1`). macOS accepts only numbers in the versions of the app bundle, so `application/short_version` and `application/version` of the macOS preset carry the version without the suffix (e.g., `1.0.0`).
 
 Ship the whole folder (the executable, the `.pck` and the `data_BirdDog_*` folder with the .NET runtime and ONNX Runtime), together with `LICENSE`, `THIRD_PARTY_NOTICES.md` and `licenses/`.
 The `.gdignore` in `build/` hides the packages from Godot, which would otherwise try to load the camera extension of the Windows package (see below), and fail, on the other platforms.
