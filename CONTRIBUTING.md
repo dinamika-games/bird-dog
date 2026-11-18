@@ -148,7 +148,7 @@ for p in linux windows macos; do
 done
 ```
 
-The version of the game is `config/version` in `project.godot` (e.g., `1.0.0-rc1`). macOS accepts only numbers in the versions of the app bundle, so `application/short_version` and `application/version` of the macOS preset carry the version without the suffix (e.g., `1.0.0`).
+The version of the game is `config/version` in `project.godot` (e.g., `1.0.0`). macOS accepts only numbers in the versions of the app bundle, so `application/short_version` and `application/version` of the macOS preset carry the version without a suffix such as `-rc1` (e.g., `1.0.0` for `1.0.0-rc1`).
 
 Ship the whole folder (the executable, the `.pck` and the `data_BirdDog_*` folder with the .NET runtime and ONNX Runtime), together with `LICENSE`, `THIRD_PARTY_NOTICES.md` and `licenses/`.
 The `.gdignore` in `build/` hides the packages from Godot, which would otherwise try to load the camera extension of the Windows package (see below), and fail, on the other platforms.
