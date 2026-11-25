@@ -32,8 +32,11 @@ const LOOK_AHEAD_KM := 7.0
 ## A boat farther than this from its way finds a new one, in kilometres.
 const OFF_WAY_KM := 5.0
 
-## At most this many cells near the goal are tried as the end of the way.
+## At most this many cells near the goal are tried as the end of the way,
+## and this many near the boat as its start, within this many kilometres.
 const MAX_GOALS := 24
+const MAX_STARTS := 8
+const START_KM := 6.0
 
 ## The grid of the whole chart, shared by all the navigators, and where it
 ## starts, in kilometres.
@@ -117,20 +120,25 @@ func plan(from: Vector2, to: Vector2, near: float) -> bool:
     goal = to
     _next = 1
     path = PackedVector2Array()
-    var starts := _sea_cells(from, 3.0)
+    var starts := _sea_cells(from, START_KM)
     var goals := _sea_cells(to, near)
     if starts.is_empty() or goals.is_empty():
         return false
-    for end in goals.slice(0, MAX_GOALS):
-        var cells := _grid.get_id_path(starts[0], end)
-        if cells.is_empty():
-            continue
-        path.append(from)
-        for i in range(1, cells.size()):
-            path.append(_middle(cells[i]))
-        if path.size() < 2:
-            path.append(_middle(end))
-        return true
+    # NOTE (mristin):
+    # In a narrow inlet, the closest cells at sea may be pockets of the grid
+    # cut off from the open sea (the coast closes the cells around them);
+    # then the way starts from the next closest cell which reaches the goal.
+    for start in starts.slice(0, MAX_STARTS):
+        for end in goals.slice(0, MAX_GOALS):
+            var cells := _grid.get_id_path(start, end)
+            if cells.is_empty():
+                continue
+            path.append(from)
+            for i in range(1 if start == starts[0] else 0, cells.size()):
+                path.append(_middle(cells[i]))
+            if path.size() < 2:
+                path.append(_middle(end))
+            return true
     return false
 
 
