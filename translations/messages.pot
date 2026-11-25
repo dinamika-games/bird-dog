@@ -316,15 +316,15 @@ msgid "{ducats} {ducats|ducat|ducats}"
 msgstr ""
 
 #: scenes/mission/booster_card.gd
-msgid "Not enough ducats"
-msgstr ""
-
-#: scenes/mission/booster_card.gd
 msgid "Two boosters already"
 msgstr ""
 
 #: scenes/mission/booster_card.gd
 msgid "You have it already"
+msgstr ""
+
+#: scenes/mission/booster_card.gd
+msgid "Not enough ducats"
 msgstr ""
 
 #: scenes/mission/errands.gd

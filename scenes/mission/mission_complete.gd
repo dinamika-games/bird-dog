@@ -60,6 +60,18 @@ func _ready() -> void:
     button.position = Vector2(_SHEET.get_center().x - button.size.x * 0.5, BUTTON_TOP)
     button.pressed.connect(func() -> void: finished.emit())
     add_child(button)
+    Speech.say(self, spoken())
+
+
+## What the voice reads as the screen shows: what the crew achieved, and what
+## it gets from now on.
+func spoken() -> String:
+    var said := PackedStringArray([tr(mission.victory_title)])
+    for text in mission.victory_lines:
+        said.append(tr(text))
+    if mission.reward != "":
+        said.append(tr(mission.reward))
+    return " ".join(said)
 
 
 func _process(delta: float) -> void:

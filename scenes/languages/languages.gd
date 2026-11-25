@@ -4,8 +4,9 @@ extends Node
 ##
 ## The languages are listed in `res://translations/languages.json`, each with its
 ## code, its name in itself, an optional second line (e.g., the dialect),
-## "Choose your language" in itself, and its alphabet (for the keyboard on the
-## screen, on which the players type the names of their captains). That list
+## "Choose your language" in itself, its alphabet (for the keyboard on the
+## screen, on which the players type the names of their captains), and the
+## locale of the voice which reads it aloud (see Voice). That list
 ## is the only place to add a language: the translations
 ## (`res://translations/<code>.po`) are registered from it here, the language
 ## select shows it, and the tools in
@@ -110,6 +111,15 @@ func alphabet() -> String:
         if language["code"] == current():
             return language["alphabet"]
     return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+
+## The locale of the voice which reads the language aloud, e.g., "pt_PT" (and
+## not the Portuguese of Brazil); see Voice.
+func voice_locale(code: String) -> String:
+    for language in languages:
+        if language["code"] == code:
+            return language.get("voice", code)
+    return code
 
 
 ## Switch to the language and remember it for the next start.

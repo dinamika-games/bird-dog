@@ -50,7 +50,16 @@ var selected := false
 var title_size := 72
 var text_size := 30
 
+## What the voice says when a hand starts pointing at the button (see
+## [method spoken]); empty for the title and the text.
+var speech := ""
+
+## The language in which the voice says it (e.g., the name of a language on the
+## language select); empty for the language of the game.
+var speech_language := ""
+
 var _hover := 0.0
+var _pointed := false
 var _flash := 0.0
 var _charge := 0.0
 var _cursor: HandCursor = null
@@ -78,6 +87,19 @@ func _exit_tree() -> void:
 ## Whether the hand cursor of the button may stick to it and press it now.
 func is_active_for(cursor: HandCursor) -> bool:
     return _cursor == cursor and is_visible_in_tree() and not is_blocked()
+
+
+## What the voice says when a hand starts pointing at the button: the
+## [member speech], or else the title and the text. A card which draws more
+## (e.g., the hallmarks of a person) overrides it.
+func spoken() -> String:
+    if speech != "":
+        return speech
+    var parts := PackedStringArray()
+    for part in [title, text]:
+        if part.strip_edges() != "":
+            parts.append(part.strip_edges())
+    return ". ".join(parts)
 
 
 ## Whether a hand (or the mouse) points at the button.
@@ -137,6 +159,12 @@ func _process(delta: float) -> void:
             if contains(charge["position"]):
                 _charge = maxf(_charge, charge["progress"])
     _hover = lerpf(_hover, 1.0 if hovered else 0.0, 1.0 - exp(-delta * 14.0))
+    # NOTE (mristin):
+    # The voice reads the button once, as the hand comes onto it, so that the
+    # players who can not read know what they would choose.
+    if hovered and not _pointed:
+        Speech.say(self, spoken(), true, speech_language)
+    _pointed = hovered
     _flash = maxf(0.0, _flash - delta * 3.0)
     queue_redraw()
 

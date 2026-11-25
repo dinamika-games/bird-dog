@@ -399,11 +399,6 @@ msgstr "{ducats} {ducats|ducado|ducados}"
 
 #: scenes/mission/booster_card.gd
 #, fuzzy
-msgid "Not enough ducats"
-msgstr "Faltam ducados"
-
-#: scenes/mission/booster_card.gd
-#, fuzzy
 msgid "Two boosters already"
 msgstr "Já têm dois reforços"
 
@@ -411,6 +406,11 @@ msgstr "Já têm dois reforços"
 #, fuzzy
 msgid "You have it already"
 msgstr "Já têm isto"
+
+#: scenes/mission/booster_card.gd
+#, fuzzy
+msgid "Not enough ducats"
+msgstr "Faltam ducados"
 
 #: scenes/mission/errands.gd
 #, fuzzy

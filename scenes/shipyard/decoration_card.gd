@@ -45,6 +45,17 @@ func _process(delta: float) -> void:
         _boat.position = Vector2(size.x * 0.5, size.y * 0.42)
 
 
+## The voice reads the name of the decoration, and whether it is on board or
+## bought.
+func spoken() -> String:
+    var name_text := tr(decoration.name) if decoration != null else tr("Nothing")
+    if state == "on board":
+        return "%s. %s" % [name_text, tr("On board")]
+    if state == "bought" or decoration == null:
+        return "%s. %s" % [name_text, tr("Bought")]
+    return name_text
+
+
 func _draw() -> void:
     super()
     var font := ThemeDB.fallback_font

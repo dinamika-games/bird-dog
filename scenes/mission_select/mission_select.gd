@@ -168,7 +168,11 @@ func _show_chapter(number: int, enter := true) -> void:
     for tab in _tabs:
         tab.selected = tab == _tabs[number - 1] if number - 1 < _tabs.size() else false
         tab.queue_redraw()
+    # NOTE (mristin):
+    # The voice reads the heading of a chapter which the players switched to
+    # (the first one is read as the screen opens, see MenuScreen).
     if _grid != null:
+        Speech.say(self, heading())
         _grid.queue_free()
     _grid = GridContainer.new()
     _grid.columns = 5
@@ -222,15 +226,20 @@ func _go(scene: String) -> void:
     go_next(0.4)
 
 
+func heading() -> String:
+    var chapter := MissionCatalog.chapter(_chapter)
+    if chapter == null:
+        return tr("Choose a mission")
+    return tr("Chapter {number}: {title}").format(
+        {"number": chapter.number, "title": tr(chapter.title)}
+    )
+
+
 func _draw_screen() -> void:
     var font := ThemeDB.fallback_font
-    var chapter := MissionCatalog.chapter(_chapter)
-    var heading := tr("Choose a mission")
-    if chapter != null:
-        heading = tr("Chapter {number}: {title}").format(
-            {"number": chapter.number, "title": tr(chapter.title)}
-        )
-    draw_string(font, Vector2(0, 125), heading, HORIZONTAL_ALIGNMENT_CENTER, size.x, 56, Paper.RED)
+    draw_string(
+        font, Vector2(0, 125), heading(), HORIZONTAL_ALIGNMENT_CENTER, size.x, 56, Paper.RED
+    )
     var names: Array[String] = []
     for captain in _crew.captains:
         names.append(captain["name"])

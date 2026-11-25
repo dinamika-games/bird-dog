@@ -104,6 +104,7 @@ func _on_skip() -> void:
         get_tree().reload_current_scene()
     else:
         _skipped = true
+        Speech.stop(self)
 
 
 # region The timeline
@@ -136,11 +137,20 @@ func _wait(seconds: float) -> void:
         elapsed += get_process_delta_time()
 
 
-## Show a caption (already translated) and wait long enough to read it.
+## Show a caption (already translated) and wait long enough to read it, or
+## until the voice has said it, whichever is longer.
 func _say(text: String, seconds: float, mark := "") -> void:
-    _caption.text = text
+    _show_caption(text)
     _mark = mark
     await _wait(seconds)
+    while Speech.is_speaking(self) and not _skipped:
+        await get_tree().process_frame
+
+
+## Show a caption (already translated), and have the voice read it.
+func _show_caption(text: String) -> void:
+    _caption.text = text
+    Speech.say(self, text)
 
 
 func _part_1() -> void:
@@ -219,7 +229,7 @@ func _jerky_mistake() -> void:
     if _skipped:
         return
     _orbit_to(120.0, 0.8, 2.3, 1.2)
-    _caption.text = tr("Not fast and jerky...")
+    _show_caption(tr("Not fast and jerky..."))
     _mark = "bad"
     for i in range(6):
         var side := "r" if i % 2 == 0 else "l"
@@ -227,7 +237,7 @@ func _jerky_mistake() -> void:
         await _wait(0.22)
         _captain.pose_to(BirdDogPoses.all_fours(), 0.15, Tween.TRANS_LINEAR)
         await _wait(0.18)
-    _caption.text = tr("...but slow and calm.")
+    _show_caption(tr("...but slow and calm."))
     _mark = "good"
     for side in ["r", "l"]:
         _captain.pose_to(BirdDogPoses.bird_dog(side), 1.5)
@@ -265,7 +275,7 @@ func _part_2() -> void:
     await _wait(1.3)
 
     _highlight = _SCREEN_LEFT_ARM
-    _caption.text = tr("The higher the arm, the harder the turn.")
+    _show_caption(tr("The higher the arm, the harder the turn."))
     _captain.pose_to(BirdDogPoses.bird_dog(_SCREEN_LEFT_ARM, 1.0, 100.0), 1.2)
     await _wait(1.3)
     if not _skipped:
@@ -282,7 +292,7 @@ func _part_2() -> void:
     _demo_wind_visible = true
     _demo_wind_to = _demo_heading + PI
     await _say(tr("The wind moves the boat. Against the wind, it is slow..."), 4.0)
-    _caption.text = tr("...so zig-zag: left, right, left, right!")
+    _show_caption(tr("...so zig-zag: left, right, left, right!"))
     for i in range(4):
         var side := _SCREEN_LEFT_ARM if i % 2 == 0 else _SCREEN_RIGHT_ARM
         _highlight = side

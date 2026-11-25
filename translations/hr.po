@@ -397,11 +397,6 @@ msgstr "{ducats} {ducats|dukat|dukata|dukata}"
 
 #: scenes/mission/booster_card.gd
 #, fuzzy
-msgid "Not enough ducats"
-msgstr "Nima dosta dukata"
-
-#: scenes/mission/booster_card.gd
-#, fuzzy
 msgid "Two boosters already"
 msgstr "{crew|Već imaš|Već imaš|Već imate} dva"
 
@@ -409,6 +404,11 @@ msgstr "{crew|Već imaš|Već imaš|Već imate} dva"
 #, fuzzy
 msgid "You have it already"
 msgstr "To već {crew|imaš|imaš|imate}"
+
+#: scenes/mission/booster_card.gd
+#, fuzzy
+msgid "Not enough ducats"
+msgstr "Nima dosta dukata"
 
 #: scenes/mission/errands.gd
 #, fuzzy

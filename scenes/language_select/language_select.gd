@@ -44,6 +44,10 @@ func _build() -> void:
         card.title_size = int(64 * scale)
         card.text = language["subtitle"]
         card.text_size = int(34 * scale)
+        # NOTE (mristin):
+        # Every language says only its own name, in its own voice.
+        card.speech = language["name"]
+        card.speech_language = language["code"]
         card.pressed.connect(_choose.bind(i))
         add_child(card)
         _cards.append(card)

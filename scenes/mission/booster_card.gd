@@ -73,6 +73,27 @@ func _process(delta: float) -> void:
         _boat.position = Vector2(size.x * 0.5, 82 - _lift())
 
 
+## Why the crew can't buy the booster, for the players; "" if it can.
+func reason_text() -> String:
+    match reason:
+        "":
+            return ""
+        "full":
+            return tr("Two boosters already")
+        "held":
+            return tr("You have it already")
+    return tr("Not enough ducats")
+
+
+## The voice reads the name, and why the booster can't be bought.
+func spoken() -> String:
+    if booster == null:
+        return ""
+    if reason == "":
+        return tr(booster.name)
+    return "%s. %s" % [tr(booster.name), reason_text()]
+
+
 func _draw() -> void:
     super()
     if booster == null:
@@ -125,11 +146,7 @@ func _draw() -> void:
         # A booster which the crew can't buy is clearly greyed, and the reason
         # stands on a band of its own, away from the description.
         draw_rect(Rect2(Vector2.ZERO, size), Color(0.42, 0.4, 0.37, 0.72))
-        var why := tr("Not enough ducats")
-        if reason == "full":
-            why = tr("Two boosters already")
-        elif reason == "held":
-            why = tr("You have it already")
+        var why := reason_text()
         var band := Rect2(0, size.y - 120, size.x, 56)
         draw_rect(band, Paper.PAPER)
         draw_rect(band, Paper.RED, false, 3.0)

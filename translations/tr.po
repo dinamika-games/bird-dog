@@ -400,11 +400,6 @@ msgstr "{ducats} duka"
 
 #: scenes/mission/booster_card.gd
 #, fuzzy
-msgid "Not enough ducats"
-msgstr "Yeterli duka yok"
-
-#: scenes/mission/booster_card.gd
-#, fuzzy
 msgid "Two boosters already"
 msgstr "Zaten iki takviye var"
 
@@ -412,6 +407,11 @@ msgstr "Zaten iki takviye var"
 #, fuzzy
 msgid "You have it already"
 msgstr "Bu zaten sizde var"
+
+#: scenes/mission/booster_card.gd
+#, fuzzy
+msgid "Not enough ducats"
+msgstr "Yeterli duka yok"
 
 #: scenes/mission/errands.gd
 #, fuzzy

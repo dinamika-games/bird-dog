@@ -114,6 +114,22 @@ func present(new_scene: Dictionary, run: MissionRun, port: Port) -> void:
         _build_shop()
     visible = true
     queue_redraw()
+    Speech.say(self, spoken())
+
+
+## What the voice reads when the card shows: who talks and what they say, or
+## the question of a line-up. The answers are read as a hand points at them
+## (see HandButton).
+func spoken() -> String:
+    if _scene["kind"] == "lineup":
+        return _run.say(_scene["question"], player)
+    var said := PackedStringArray()
+    var person: Person = _scene.get("person")
+    if person != null:
+        said.append(tr(person.name) + ".")
+    for a_line in _scene["lines"]:
+        said.append(_run.say(a_line, player))
+    return " ".join(said)
 
 
 ## The layout of the right half: every area mirrored around the middle.

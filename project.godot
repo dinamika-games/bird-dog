@@ -16,6 +16,10 @@ run/main_scene="res://scenes/language_select/language_select.tscn"
 config/features=PackedStringArray("4.6", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[audio]
+
+general/text_to_speech=true
+
 [autoload]
 
 Languages="*res://scenes/languages/languages.gd"
@@ -23,6 +27,7 @@ Vision="*res://scenes/vision/vision.tscn"
 Music="*res://scenes/music/music.gd"
 Crew="*res://scenes/crew/crew.gd"
 Session="*res://scenes/session/session.gd"
+Voice="*res://scenes/voice/voice.gd"
 
 [display]
 

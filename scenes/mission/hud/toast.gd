@@ -15,6 +15,9 @@ func show_text(text: String) -> void:
             message["age"] = 0.0
             return
     _messages.append({"text": text, "age": 0.0})
+    # NOTE (mristin):
+    # A toast waits until the voice has said what it was saying.
+    Speech.say(self, text, false)
     if _messages.size() > 3:
         _messages.pop_front()
 

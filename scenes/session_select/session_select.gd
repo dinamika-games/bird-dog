@@ -33,6 +33,10 @@ func _build() -> void:
         if voyage["id"] == last_id:
             var resume := _card(tr("Continue"), _describe(voyage), Vector2(640, 330), 64)
             resume.selected = true
+            # NOTE (mristin):
+            # The voice says only the name of the voyage, not the captains and
+            # the stars.
+            resume.speech = voyage["name"]
             resume.pressed.connect(_continue.bind(voyage["id"]))
             top.add_child(_with_delete(resume, voyage))
 
@@ -51,6 +55,7 @@ func _build() -> void:
         if voyage["id"] == last_id or shown >= _MAX_OTHERS:
             continue
         var card := _card(voyage["name"], _describe(voyage, false), Vector2(400, 200), 36)
+        card.speech = voyage["name"]
         card.pressed.connect(_continue.bind(voyage["id"]))
         others.add_child(_with_delete(card, voyage))
         shown += 1
@@ -127,11 +132,15 @@ func _new() -> void:
     go_next(0.4)
 
 
+func heading() -> String:
+    return tr("Your voyages")
+
+
 func _draw_screen() -> void:
     draw_string(
         ThemeDB.fallback_font,
         Vector2(0, 150),
-        tr("Your voyages"),
+        heading(),
         HORIZONTAL_ALIGNMENT_CENTER,
         size.x,
         64,
