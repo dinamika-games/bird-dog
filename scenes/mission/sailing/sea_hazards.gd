@@ -460,6 +460,14 @@ func _steer_ship(ship: Dictionary, delta: float, helms: Array[Helm], together: b
             var astray: bool = (
                 not ahead.is_empty() and (ahead[0] - ship["km"]).dot(ship["km"] - patrol) < 0.0
             )
+            # NOTE (mristin):
+            # The way is planned from where the corsair was (see
+            # FLEE_PLAN_SECONDS), and the grid is coarse: from where it is
+            # now, the land may lie between it and the next point of the way.
+            # Then it would slide along the wrong side of the coast, maybe
+            # right across the bow of the patrol, so it plans anew.
+            if not astray and not ahead.is_empty():
+                astray = not _chart.is_clear_line(ship["km"], ahead[0])
             if astray:
                 # NOTE (mristin):
                 # Straight away from the patrol until the new way is planned.

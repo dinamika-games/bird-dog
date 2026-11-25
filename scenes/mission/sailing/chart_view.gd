@@ -41,6 +41,10 @@ const EDGE_Z := 20
 ## crosses_land]), in kilometres.
 const EDGE_CELL_KM := 4.0
 
+## The height of the rows of the edges of the coasts (see [method is_land]),
+## in kilometres.
+const LAND_ROW_KM := 1.0
+
 ## The ports where the crew can go now: they get a big red ring and a flag.
 var targets: Array[Port] = []:
     set(value):
@@ -87,6 +91,14 @@ var _reef_names: Array = []
 ## EDGE_CELL_KM] which they touch (see [method crosses_land]): each a
 ## PackedVector2Array of its two ends.
 var _coast_cells := {}
+
+## The edges of the coasts by the row of [constant LAND_ROW_KM] which they
+## span, from the top of the chart (see [method is_land]): for each row, the
+## two ends of every edge one after the other, and the polygon of every edge,
+## in the order of the polygons.
+var _row_ends: Array[PackedVector2Array] = []
+var _row_polygons: Array[PackedInt32Array] = []
+var _first_row := 0
 
 ## The bounds of the chart, in kilometres (see World.bounds_km).
 var _bounds_km := Rect2(-1e9, -1e9, 2e9, 2e9)
@@ -137,6 +149,11 @@ func _ready() -> void:
     sea.material = sea_material
     add_child(sea)
 
+    _first_row = floori(bounds.position.y / LAND_ROW_KM)
+    var rows: Array[Array] = []
+    for row in range(_first_row, floori(bounds.end.y / LAND_ROW_KM) + 1):
+        rows.append([])
+
     for polygon in World.chart()["polygons"]:
         var km := PackedVector2Array()
         var px := PackedVector2Array()
@@ -145,6 +162,7 @@ func _ready() -> void:
             px.append(Vector2(point[0], point[1]) * PX_PER_KM)
         _land.append(km)
         _add_coast(km)
+        _add_rows(km, _land.size() - 1, rows)
         var box := Rect2(km[0], Vector2.ZERO)
         for point in km:
             box = box.expand(point)
@@ -171,6 +189,16 @@ func _ready() -> void:
         coast.default_color = COAST
         coast.joint_mode = Line2D.LINE_JOINT_ROUND
         add_child(coast)
+
+    for edges in rows:
+        var ends := PackedVector2Array()
+        var polygons := PackedInt32Array()
+        for edge: Array in edges:
+            ends.append(edge[0])
+            ends.append(edge[1])
+            polygons.append(edge[2])
+        _row_ends.append(ends)
+        _row_polygons.append(polygons)
 
     zoom_map = ChartZoom.new(_land)
     _ports = World.ports()
@@ -224,13 +252,53 @@ static func _corners(rect: Rect2) -> PackedVector2Array:
 
 ## Whether a point (in kilometres) lies on the land, or beyond the edge of the
 ## chart.
+##
+## NOTE (mristin):
+## We count the coasts crossed by a ray from the point to the east, for each
+## polygon on its own (the minor islands of the chart overlap the islands of
+## the land). We do not use Geometry2D.is_point_in_polygon: it casts a slanted
+## ray, and where that ray runs through a corner of a coast, it counts the
+## corner twice, so that a thin line out at sea counted as the land (a boat
+## north of Corfu stopped there as at a coast).
 func is_land(km: Vector2) -> bool:
     if not _bounds_km.has_point(km):
         return true
-    for i in range(_land.size()):
-        if _boxes[i].has_point(km) and Geometry2D.is_point_in_polygon(km, _land[i]):
-            return true
-    return false
+    var row := floori(km.y / LAND_ROW_KM) - _first_row
+    if row < 0 or row >= _row_ends.size():
+        return false
+    var ends := _row_ends[row]
+    var polygons := _row_polygons[row]
+    var inside := false
+    for i in range(polygons.size()):
+        if i > 0 and polygons[i] != polygons[i - 1]:
+            if inside:
+                return true
+        var a := ends[2 * i]
+        var b := ends[2 * i + 1]
+        # NOTE (mristin):
+        # An edge counts if one end lies above the point and the other at or
+        # below it, so that a ray through a corner counts it exactly once.
+        if (a.y > km.y) != (b.y > km.y):
+            if km.x < a.x + (km.y - a.y) * (b.x - a.x) / (b.y - a.y):
+                inside = not inside
+    return inside
+
+
+## File the edges of the coast of the polygon [param index] under the
+## [param rows] of [constant LAND_ROW_KM] which they span (see [method
+## is_land]), each as [a, b, index].
+func _add_rows(polygon: PackedVector2Array, index: int, rows: Array[Array]) -> void:
+    for i in range(polygon.size()):
+        var a := polygon[i]
+        var b := polygon[(i + 1) % polygon.size()]
+        if a.y == b.y:
+            # NOTE (mristin):
+            # A level edge never crosses the ray to the east (see is_land).
+            continue
+        var first := maxi(floori(minf(a.y, b.y) / LAND_ROW_KM) - _first_row, 0)
+        var last := mini(floori(maxf(a.y, b.y) / LAND_ROW_KM) - _first_row, rows.size() - 1)
+        for row in range(first, last + 1):
+            rows[row].append([a, b, index])
 
 
 ## The heading in which a boat leaves the port, given [param entry], the heading
