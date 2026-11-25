@@ -35,6 +35,7 @@ func texts() -> Dictionary:
 func show_tip(text: String) -> void:
     _text = text
     _age = 0.0
+    Speech.say(self, text, false)
 
 
 ## Whether the panel shows a tip now.

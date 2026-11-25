@@ -55,6 +55,11 @@ static func _wrap(font: Font, text: String, font_size: int, width: float) -> Arr
     return lines
 
 
+## The voice reads the title of the mission.
+func spoken() -> String:
+    return title_text
+
+
 func _draw() -> void:
     super()
     var font := ThemeDB.fallback_font

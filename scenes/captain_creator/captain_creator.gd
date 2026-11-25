@@ -58,10 +58,15 @@ func _on_ready_changed(_is_ready: bool) -> void:
     go_next(0.0)
 
 
+func heading() -> String:
+    return tr("Create your captain") if _panels.size() == 1 else tr("Create your captains")
+
+
 func _draw_screen() -> void:
     var font := ThemeDB.fallback_font
-    var title := tr("Create your captain") if _panels.size() == 1 else tr("Create your captains")
-    draw_string(font, Vector2(0, 115), title, HORIZONTAL_ALIGNMENT_CENTER, size.x, 56, Paper.RED)
+    draw_string(
+        font, Vector2(0, 115), heading(), HORIZONTAL_ALIGNMENT_CENTER, size.x, 56, Paper.RED
+    )
 
     if _panels.size() == 2:
         var x := size.x * 0.5

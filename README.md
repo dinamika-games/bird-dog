@@ -14,6 +14,14 @@ See [DESIGN.md](DESIGN.md) for the design, and [CONTRIBUTING.md](CONTRIBUTING.md
 The game runs entirely on your computer and works offline.
 The webcam images are processed locally, in memory, and are never sent anywhere.
 
+## Read aloud: press V
+
+For the children who can not read yet, the game can read its texts aloud with the voices of your computer (offline, too).
+The voice is off at first: **press V** to switch it on, and V again to switch it off; the game remembers it.
+
+On Linux, install Speech Dispatcher and eSpeak NG for that (e.g., `sudo apt install speech-dispatcher espeak-ng`).
+On macOS and Windows, the game uses the system voices; a language without a voice on your computer (e.g., Albanian) shows its texts without reading them.
+
 ## Supported systems
 
 You need a webcam which supports 640x480.

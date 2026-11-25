@@ -207,10 +207,11 @@ def run_godot_tests(godot: str, jobs: int, only: Optional[Sequence[str]], verbos
                 "--script",
                 str(test),
                 # NOTE (mristin):
-                # The tests never open the camera and never play the music.
+                # The tests never open the camera, never play the music and never speak.
                 "--",
                 "--no-camera",
                 "--no-music",
+                "--no-voice",
             ],
             timeout=600.0,
         )
@@ -263,6 +264,7 @@ def smoke_scenes(godot: str, jobs: int) -> int:
                 "--",
                 "--no-camera",
                 "--no-music",
+                "--no-voice",
             ],
             timeout=120.0,
         )
@@ -316,6 +318,7 @@ def run_render_tests(godot: str, verbose: bool) -> int:
                 "--",
                 "--no-camera",
                 "--no-music",
+                "--no-voice",
             ],
             timeout=900.0,
         )

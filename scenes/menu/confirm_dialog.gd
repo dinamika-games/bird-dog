@@ -78,6 +78,11 @@ func _ready() -> void:
         button.pressed.connect(entry[1])
         actions.add_child(button)
 
+    # NOTE (mristin):
+    # The question waits until the voice has said the heading of the screen
+    # (a dialog may open together with the screen, e.g., a new chapter).
+    Speech.say(self, question, false)
+
 
 func _unhandled_input(event: InputEvent) -> void:
     if not (event is InputEventKey and event.pressed and not event.echo):

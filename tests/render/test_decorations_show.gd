@@ -7,7 +7,8 @@ extends SceneTree
 ## mission select and in the shipyard; and no two decorations of the same
 ## place may look the same.
 ##
-##     $GODOT --path . --script tests/render/test_decorations_show.gd -- --no-camera --no-music
+##     $GODOT --path . --script tests/render/test_decorations_show.gd \
+##         -- --no-camera --no-music --no-voice
 ##
 ## Pass `-- --shots=<dir>` to save the boats which look like the plain one.
 

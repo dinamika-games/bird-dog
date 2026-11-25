@@ -42,6 +42,17 @@ static func pips(share: float, step: float) -> int:
     return clampi(roundi(3.0 + (share - 1.0) / step), 1, 5)
 
 
+## The voice reads the name of the ship, and whether it is on board or bought.
+func spoken() -> String:
+    if ship == null:
+        return ""
+    if state == "on board":
+        return "%s. %s" % [tr(ship.name), tr("On board")]
+    if state == "bought":
+        return "%s. %s" % [tr(ship.name), tr("Bought")]
+    return tr(ship.name)
+
+
 func _draw() -> void:
     super()
     if ship == null:

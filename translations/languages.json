@@ -4,69 +4,79 @@
         "name": "English",
         "subtitle": "",
         "prompt": "Choose your language",
-        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "voice": "en_GB"
     },
     {
         "code": "de",
         "name": "Deutsch",
         "subtitle": "",
         "prompt": "Wähle deine Sprache",
-        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ"
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ",
+        "voice": "de_DE"
     },
     {
         "code": "es",
         "name": "Español",
         "subtitle": "",
         "prompt": "Elige tu idioma",
-        "alphabet": "ABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚÜ"
+        "alphabet": "ABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚÜ",
+        "voice": "es_ES"
     },
     {
         "code": "fr",
         "name": "Français",
         "subtitle": "",
         "prompt": "Choisis ta langue",
-        "alphabet": "ABCÇDEÉÈÊFGHIJKLMNOPQRSTUVWXYZ"
+        "alphabet": "ABCÇDEÉÈÊFGHIJKLMNOPQRSTUVWXYZ",
+        "voice": "fr_FR"
     },
     {
         "code": "hr",
         "name": "Hrvatski",
         "subtitle": "po dalmatinski",
         "prompt": "Izaberi jezik",
-        "alphabet": "ABCČĆDĐEFGHIJKLMNOPRSŠTUVZŽ"
+        "alphabet": "ABCČĆDĐEFGHIJKLMNOPRSŠTUVZŽ",
+        "voice": "hr_HR"
     },
     {
         "code": "it",
         "name": "Italiano",
         "subtitle": "",
         "prompt": "Scegli la tua lingua",
-        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZÀÈÉÌÒÙ"
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZÀÈÉÌÒÙ",
+        "voice": "it_IT"
     },
     {
         "code": "pt",
         "name": "Português",
         "subtitle": "",
         "prompt": "Escolhe a tua língua",
-        "alphabet": "ABCÇDEFGHIJKLMNOPQRSTUVWXYZÁÂÃÉÊÍÓÔÕÚ"
+        "alphabet": "ABCÇDEFGHIJKLMNOPQRSTUVWXYZÁÂÃÉÊÍÓÔÕÚ",
+        "voice": "pt_PT"
     },
     {
         "code": "ru",
         "name": "Русский",
         "subtitle": "",
         "prompt": "Выбери язык",
-        "alphabet": "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+        "alphabet": "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ",
+        "voice": "ru_RU"
     },
     {
         "code": "sq",
         "name": "Shqip",
         "subtitle": "",
         "prompt": "Zgjidh gjuhën",
-        "alphabet": "ABCÇDEËFGHIJKLMNOPQRSTUVXYZ"
+        "alphabet": "ABCÇDEËFGHIJKLMNOPQRSTUVXYZ",
+        "voice": "sq_AL"
     },
     {
         "code": "tr",
         "name": "Türkçe",
         "subtitle": "",
         "prompt": "Dilini seç",
-        "alphabet": "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ"
+        "alphabet": "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ",
+        "voice": "tr_TR"
     }
 ]

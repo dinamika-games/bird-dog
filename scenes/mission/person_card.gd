@@ -84,6 +84,17 @@ func layout() -> Dictionary:
     }
 
 
+## The voice reads the hallmarks, in the order in which they stand on the card,
+## so that the players who can not read can compare them, too.
+func spoken() -> String:
+    if person == null:
+        return ""
+    var parts := PackedStringArray()
+    for hallmark in layout()["hallmarks"]:
+        parts.append(hallmark["text"])
+    return ". ".join(parts)
+
+
 func _rank(hallmark: Hallmark) -> int:
     var kinds := ["clothes", "hair", "thing", "sail", "hull"]
     return kinds.find(hallmark.kind) * 100 + person.hallmarks.find(hallmark)

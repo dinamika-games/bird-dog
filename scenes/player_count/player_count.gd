@@ -26,6 +26,9 @@ func _build() -> void:
         button.title_size = 150
         button.text = tr("One captain") if count == 1 else tr("Two captains")
         button.text_size = 44
+        # NOTE (mristin):
+        # The voice says only the number.
+        button.speech = str(count)
         button.icon = _flag
         button.icon_count = count
         button.pressed.connect(_choose.bind(count))
@@ -51,11 +54,15 @@ func _choose(count: int) -> void:
     go_next(0.5)
 
 
+func heading() -> String:
+    return tr("How many captains sail?")
+
+
 func _draw_screen() -> void:
     draw_string(
         ThemeDB.fallback_font,
         Vector2(0, 250),
-        tr("How many captains sail?"),
+        heading(),
         HORIZONTAL_ALIGNMENT_CENTER,
         size.x,
         64,

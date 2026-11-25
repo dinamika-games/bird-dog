@@ -398,11 +398,6 @@ msgstr "{ducats} {ducats|ducat|ducats}"
 
 #: scenes/mission/booster_card.gd
 #, fuzzy
-msgid "Not enough ducats"
-msgstr "Pas assez de ducats"
-
-#: scenes/mission/booster_card.gd
-#, fuzzy
 msgid "Two boosters already"
 msgstr "Déjà deux atouts"
 
@@ -410,6 +405,11 @@ msgstr "Déjà deux atouts"
 #, fuzzy
 msgid "You have it already"
 msgstr "Vous l'avez déjà"
+
+#: scenes/mission/booster_card.gd
+#, fuzzy
+msgid "Not enough ducats"
+msgstr "Pas assez de ducats"
 
 #: scenes/mission/errands.gd
 #, fuzzy

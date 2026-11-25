@@ -166,6 +166,7 @@ func _row(label_text: String) -> HBoxContainer:
 func _add_name_row() -> void:
     var row := _row(tr("Name"))
     var name_button := _button("", Vector2(400 if wide else 360, _row_height))
+    name_button.speech = tr("Name")
     name_button.text_size = int(_font_size * 1.2)
     name_button.pressed.connect(open_keyboard)
     row.add_child(name_button)
@@ -185,16 +186,22 @@ func _add_choice_row(key: String, label_text: String) -> void:
     var row := _row(label_text)
     var arrow_size := Vector2(_row_height * 1.1, _row_height)
 
+    # NOTE (mristin):
+    # The voice says only what the row changes (e.g., "Skin"), for the arrows
+    # and for the value alike; a step says the new choice (see _step).
     var previous := _button("", arrow_size)
+    previous.speech = label_text
     previous.arrow = -1
     previous.pressed.connect(_step.bind(key, -1))
     row.add_child(previous)
 
     var value := _button("", Vector2(260 if wide else 240, _row_height))
+    value.speech = label_text
     row.add_child(value)
     _values[key] = value
 
     var next := _button("", arrow_size)
+    next.speech = label_text
     next.arrow = 1
     next.pressed.connect(_step.bind(key, 1))
     row.add_child(next)
@@ -223,6 +230,8 @@ func _step(key: String, direction: int) -> void:
     var index := choices.find(looks[key])
     looks[key] = choices[posmod(index + direction, choices.size())]
     _changed()
+    if key in ["hair", "cap", "face", "eye_patch"]:
+        Speech.say(self, _choice_name(key, looks[key]))
 
 
 func _set_gender(gender: String) -> void:

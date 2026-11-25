@@ -7,7 +7,9 @@ extends Control
 ## A screen extends this class and overrides:
 ##
 ## * [method _build] to add its HandButtons and other controls,
-## * [method _draw_screen] to draw its titles and pictures on the paper.
+## * [method _draw_screen] to draw its titles and pictures on the paper,
+## * [method heading] to give the title which the voice reads as the screen
+##   opens (see Voice).
 ##
 ## When the screen is done, it calls [method go_next]. If [member next_scene]
 ## is empty (as in the test screens of `scenes/tests/`), the screen starts over
@@ -32,10 +34,18 @@ func _ready() -> void:
     # The cursor draws over everything which the screen added.
     move_child(cursor, get_child_count() - 1)
 
+    Speech.say(self, heading())
+
 
 ## Add the controls of the screen; called once from _ready.
 func _build() -> void:
     pass
+
+
+## The title of the screen (translated), which the voice reads as the screen
+## opens; empty for none.
+func heading() -> String:
+    return ""
 
 
 ## Draw the titles and the pictures of the screen on the paper.

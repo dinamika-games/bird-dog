@@ -2,7 +2,7 @@ extends SceneTree
 ## A soak test, too long to run on every commit: run it now and then, e.g.,
 ## before a release, with
 ##
-##     $GODOT --headless --path . -s tests/soak/soak_missions.gd -- --no-camera --no-music
+##     $GODOT --headless --path . -s tests/soak/soak_missions.gd -- --no-camera --no-music --no-voice
 ##
 ## Every mission sails for minutes of game time with one player and with two,
 ## with wandering steering (see soak_mission.gd); the scenes of the ports and

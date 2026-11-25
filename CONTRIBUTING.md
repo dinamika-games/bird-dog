@@ -17,6 +17,7 @@ The game is made with [Godot] 4.6 (.NET), in GDScript and C#, like [Splash 'n' S
 * **A mission** (`scenes/mission/`) sails the chart (`sailing/`), shows the HUD (`hud/`: the days, the clue, the wind, the wheel and the minimap) and the port scenes (`StoryCard`), while `MissionRun` (`scenes/missions/`) follows the steps. Without a camera, A/D or the arrow keys steer. `tests/godot/test_missions.gd` checks the world and plays mission 1 headless.
 * **The vision** runs for the whole game in the `Vision` autoload (`scenes/vision/`), so that the camera starts only once.
 * **The instruction** (`scenes/instruction/`, after the language select) shows how to do the bird dog and how it steers, with a 3D captain built from shapes in code (`Captain3D`, posed by `BirdDogPoses`).
+* **The voice** (`scenes/voice/`) reads the texts aloud with the voices of the computer (`DisplayServer.tts_*`), for the children who can not read yet. Say a text with `Speech.say(self, text)`; a `HandButton` says its `spoken()` (by default its title and text) as a hand comes onto it, and a `MenuScreen` says its `heading()` as it opens. On Linux, it needs Speech Dispatcher and eSpeak NG (`sudo apt install speech-dispatcher espeak-ng`).
 * **The wheel** (`scenes/wheel/ship_wheel.gd`) draws the ship's wheel of wood and brass on any canvas.
 * **The test screens** (`scenes/tests/`) show every part of the game in isolation; see below.
 
@@ -47,7 +48,7 @@ $GODOT --path . scenes/tests/test_menu/test_menu.tscn
 
 The test screens are small scenes in `scenes/tests/`, which instance the real scene with the settings of the test (e.g., `next_scene = ""`, so that a menu starts over instead of going on, or `first_part = 2` and `only_one_part = true` for the second part of the instruction). Add a test screen for every new screen, and list it in `scenes/tests/test_menu/test_menu.gd`. The pre-commit checks start every test screen headless (`smoke-scenes`).
 
-`$GODOT --path .` starts the whole game from the language select. The options for every start: `--lang=<code>`, `--no-camera` (A/D and the arrow keys steer then) and `--no-music`.
+`$GODOT --path .` starts the whole game from the language select. The options for every start: `--lang=<code>`, `--no-camera` (A/D and the arrow keys steer then), `--no-music` and `--no-voice` (the voice is off at first; V switches it on and off while playing).
 
 In the instruction, Space skips it, Esc quits.
 
@@ -101,7 +102,7 @@ The game is written in English and translated to Russian (`ru`), Croatian in the
   $GODOT --path . -- --lang=de   # or es, fr, it, pt, sq, tr
   ```
 
-* **Add a language** with one entry in `translations/languages.json` (the code, e.g., `nl`, its name in itself, an optional second line, "Choose your language" in itself and its alphabet for the name keyboard; keep English first and the rest sorted by the code), then run `extract.py`, which creates `translations/nl.po`; set its `Plural-Forms` header, and add its plural rule to `Grammar.plural_index` if it is not "one and other" (as French and Russian). The game and the language select pick it up from the list.
+* **Add a language** with one entry in `translations/languages.json` (the code, e.g., `nl`, its name in itself, an optional second line, "Choose your language" in itself, its alphabet for the name keyboard and the locale of its voice, e.g., `nl_NL`; keep English first and the rest sorted by the code), then run `extract.py`, which creates `translations/nl.po`; set its `Plural-Forms` header, and add its plural rule to `Grammar.plural_index` if it is not "one and other" (as French and Russian). The game and the language select pick it up from the list.
 * **Check** the coverage and the placeholders (`--verbose` lists the open messages):
 
   ```
@@ -191,7 +192,7 @@ The game runs twelve times faster than the fixed frame rate gives, and the boats
 The tests keep their voyages and settings in `user://tests/`, and leave the player's alone.
 
 ```
-$GODOT --headless --fixed-fps 60 --path . --script tests/godot/end2end/test_one_player.gd -- --no-camera --no-music --seed=7
+$GODOT --headless --fixed-fps 60 --path . --script tests/godot/end2end/test_one_player.gd -- --no-camera --no-music --no-voice --seed=7
 ```
 
 **The render tests** (`tests/render/`) look at the pictures the game renders, so they need a window (the pre-commit checks run them as `render-test` if there is a display, and skip them otherwise, e.g., on the continuous integration):
@@ -200,7 +201,7 @@ $GODOT --headless --fixed-fps 60 --path . --script tests/godot/end2end/test_one_
 * `test_decorations_show.gd` puts every decoration (from the shipyard and from the merchants) on every ship, at sea, on the mission select and in the shipyard, and checks that the boat with it is not pixel identical to the boat without it, and that no two decorations of the same place look alike.
 
 ```
-$GODOT --path . --windowed --script tests/render/test_edge_of_the_world.gd -- --no-camera --no-music --shots=/tmp/shots
+$GODOT --path . --windowed --script tests/render/test_edge_of_the_world.gd -- --no-camera --no-music --no-voice --shots=/tmp/shots
 ```
 
 `tests/godot/test_edge_sliding.gd` sails boats along the edge, into it and along the land where it meets the edge, and checks that no step ever crosses the land (see `ChartView.crosses_land`).
@@ -208,13 +209,13 @@ $GODOT --path . --windowed --script tests/render/test_edge_of_the_world.gd -- --
 **The soak test** (`tests/soak/`) is too long for every commit: run it now and then, e.g., before a release. Every mission sails for minutes of game time with one and with two players, with wandering steering, and the test checks that no boat gets stuck, that the hazards do not pile up and that the objects in memory do not keep growing:
 
 ```
-$GODOT --headless --path . -s tests/soak/soak_missions.gd -- --no-camera --no-music
+$GODOT --headless --path . -s tests/soak/soak_missions.gd -- --no-camera --no-music --no-voice
 ```
 
 **The soak test of the towing** tows boats from many random points at sea to the nearest port and checks that neither the towed boat nor the fishing boat goes onto the land, and that every tow ends with the fishing boat in the port. It prints its random seed, so that a failure can be repeated with `--seed=N`; `--towings=N` sets how many, and `--snapshots=DIR` saves pictures of the first four (run it in a window then, without `--headless`):
 
 ```
-$GODOT --headless --path . -s tests/soak/soak_towing.gd -- --no-camera --no-music
+$GODOT --headless --path . -s tests/soak/soak_towing.gd -- --no-camera --no-music --no-voice
 ```
 
 ### Commit messages

@@ -25,11 +25,15 @@ func _on_finished(voyage_name: String) -> void:
     go_next(0.3)
 
 
+func heading() -> String:
+    return tr("Name your voyage")
+
+
 func _draw_screen() -> void:
     draw_string(
         ThemeDB.fallback_font,
         Vector2(0, 130),
-        tr("Name your voyage"),
+        heading(),
         HORIZONTAL_ALIGNMENT_CENTER,
         size.x,
         60,

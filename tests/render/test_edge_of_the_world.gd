@@ -6,7 +6,8 @@ extends SceneTree
 ## which shows a point beyond the bounds must be black, except for the boat
 ## itself.
 ##
-##     $GODOT --path . --script tests/render/test_edge_of_the_world.gd -- --no-camera --no-music
+##     $GODOT --path . --script tests/render/test_edge_of_the_world.gd \
+##         -- --no-camera --no-music --no-voice
 ##
 ## Pass `-- --shots=<dir>` to save the pictures with problems.
 

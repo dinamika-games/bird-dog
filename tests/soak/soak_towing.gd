@@ -2,7 +2,7 @@ extends SceneTree
 ## A soak test of the towing (see Tow and SeaRoute), too long to run on every
 ## commit: run it now and then, e.g., before a release, with
 ##
-##     $GODOT --headless --path . -s tests/soak/soak_towing.gd -- --no-camera --no-music
+##     $GODOT --headless --path . -s tests/soak/soak_towing.gd -- --no-camera --no-music --no-voice
 ##
 ## Fishermen tow a boat from many random points at sea, 25 to 70 km from a
 ## random port, to the port nearest to it, frame by frame, with the zoom of

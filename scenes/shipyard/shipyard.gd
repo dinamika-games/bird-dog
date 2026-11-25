@@ -276,16 +276,14 @@ func _process(delta: float) -> void:
     _preview.sail_angle = sin(Time.get_ticks_msec() / 1800.0) * 0.4
 
 
+func heading() -> String:
+    return tr("Master Ivan's shipyard")
+
+
 func _draw_screen() -> void:
     var font := ThemeDB.fallback_font
     draw_string(
-        font,
-        Vector2(0, 110),
-        tr("Master Ivan's shipyard"),
-        HORIZONTAL_ALIGNMENT_CENTER,
-        size.x,
-        60,
-        Paper.RED
+        font, Vector2(0, 110), heading(), HORIZONTAL_ALIGNMENT_CENTER, size.x, 60, Paper.RED
     )
     var water := Rect2(60, 290, 680, 600)
     draw_rect(water, ChartView.SEA)

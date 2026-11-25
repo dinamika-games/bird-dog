@@ -398,11 +398,6 @@ msgstr "{ducats} {ducats|dukat|dukatë}"
 
 #: scenes/mission/booster_card.gd
 #, fuzzy
-msgid "Not enough ducats"
-msgstr "S'mjaftojnë dukatët"
-
-#: scenes/mission/booster_card.gd
-#, fuzzy
 msgid "Two boosters already"
 msgstr "Tashmë keni dy ndihma"
 
@@ -410,6 +405,11 @@ msgstr "Tashmë keni dy ndihma"
 #, fuzzy
 msgid "You have it already"
 msgstr "E keni tashmë"
+
+#: scenes/mission/booster_card.gd
+#, fuzzy
+msgid "Not enough ducats"
+msgstr "S'mjaftojnë dukatët"
 
 #: scenes/mission/errands.gd
 #, fuzzy
