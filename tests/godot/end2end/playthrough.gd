@@ -359,6 +359,9 @@ func _answer(mission: Node, card: StoryCard, player: int, tag: String, wrong: bo
         actions.append(str(entry["action"]))
     var controls := card.controls()
     var step := run.step()
+    if scene["kind"] == "lineup" and player >= 0 and mission._scene_steps[player] != step:
+        await _close_stale(mission, card, player, tag)
+        return false
     var solution := step.solution(run) if step != null else ""
     var action := ""
     var was_wrong := false
@@ -441,6 +444,24 @@ func _answer(mission: Node, card: StoryCard, player: int, tag: String, wrong: bo
         _wrong_answers += 1
         _seen["%s wrong %s" % [_phase, scene["kind"]]] = true
     return was_wrong
+
+
+## Close a line-up which the other crew made stale: it picked the right one of
+## the same line-up while this one was open, and the story moved on. The step
+## now has its own solution, which does not fit the line-up; the game only
+## closes it, whichever one the crew picks (see MissionStory.on_action).
+func _close_stale(mission: Node, card: StoryCard, player: int, tag: String) -> void:
+    var controls := card.controls()
+    _check(not controls.is_empty(), "%s: the stale line-up offers a pick" % tag)
+    if controls.is_empty():
+        return
+    _seen["%s stale lineup" % _phase] = true
+    await _click(
+        controls[0],
+        "the first pick of a stale line-up in %s" % tag,
+        mission._views[player].position
+    )
+    _check(not card.visible, "%s: the stale line-up closes" % tag)
 
 
 ## The boats met at sea: hand over a few things, and check that the crew
